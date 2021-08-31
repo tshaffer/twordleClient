@@ -3,26 +3,21 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Cell from './Cell';
-
-export interface AppProps {
+export interface CellProps {
 }
 
-const App = (props: AppProps) => {
+const Cell = (props: CellProps) => {
 
   React.useEffect(() => {
     init();
   }, []);
 
   const init = () => {
-    console.log('app init invoked');
+    console.log('cell init invoked');
   };
 
   return (
-    <div>
-      pizza
-      <Cell/>
-    </div>
+    <div>cell</div>
   );
 };
 
@@ -36,5 +31,5 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(Cell);
 
