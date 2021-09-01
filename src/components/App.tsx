@@ -21,7 +21,13 @@ const App = (props: AppProps) => {
   return (
     <div>
       pizza
-      <Cell/>
+      <Cell
+        row={0}
+        col={0}
+        guess={'x'}
+        number={'1'}
+        highlight={false}
+      />
     </div>
   );
 };
