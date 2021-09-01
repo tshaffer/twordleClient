@@ -42,8 +42,8 @@ module.exports = {
       }
     }),
     new CopyWebpackPlugin([
-      { from: '../tedClientBoilerplate/build/bundle.js', to: '../../tedServerBoilerplate/public/build' },
-      { from: '../tedClientBoilerplate/build/bundle.js.map', to: '../../tedServerBoilerplate/public/build' },
+      { from: '../client/build/bundle.js', to: '../../server/public/build' },
+      { from: '../client/build/bundle.js.map', to: '../../server/public/build' },
     ]),
   ]
 };
