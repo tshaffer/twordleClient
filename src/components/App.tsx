@@ -28,7 +28,7 @@ const App = (props: AppProps) => {
             y={0}
             width={100}
             height={100}
-            fill={'rgb(128,128,128)'}
+            fill={'rgb(0,0,0)'}
           />
           <Cell
             row={0}

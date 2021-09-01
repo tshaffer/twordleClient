@@ -48,7 +48,7 @@ used: true
   const focusBackground = 'rgb(255,255,0)';
   const highlightBackground = 'rgb(255,255,204)';
 
-  const { row, col, guess, number } = props;
+  const { row, col, guess, number, highlight } = props;
 
   const x = col * cellSize;
   const y = row * cellSize;
@@ -72,7 +72,7 @@ used: true
         fill={
           focus
             ? focusBackground
-            : props.highlight
+            : highlight
               ? highlightBackground
               : cellBackground
         }
