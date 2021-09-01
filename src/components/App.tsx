@@ -21,13 +21,26 @@ const App = (props: AppProps) => {
   return (
     <div>
       pizza
-      <Cell
-        row={0}
-        col={0}
-        guess={'x'}
-        number={'1'}
-        highlight={false}
-      />
+      <div style={{ margin: 0, padding: 0, position: 'relative' }}>
+        <svg viewBox="0 0 100 100">
+          <rect
+            x={0}
+            y={0}
+            width={100}
+            height={100}
+            fill={'rgb(128,128,128)'}
+          />
+          <Cell
+            row={0}
+            col={0}
+            guess={'x'}
+            number={'1'}
+            highlight={false}
+          />
+        </svg>
+
+      </div>
+
     </div>
   );
 };
