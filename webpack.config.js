@@ -42,9 +42,17 @@ module.exports = {
       }
     }),
     new CopyWebpackPlugin([
-      { from: '../client/build/bundle.js', to: '../../server/public/build' },
-      { from: '../client/build/bundle.js.map', to: '../../server/public/build' },
+      { from: '../client/build/bundle.js', to: '/Users/tedshaffer/Documents/Projects/tedword/public/build' },
+      { from: '../client/build/bundle.js.map', to: '/Users/tedshaffer/Documents/Projects/tedword/public/build' },
     ]),
   ]
 };
 //       { from: './build/bundle.js', to: '../../tedword/public/build' },
+// { from: '../client/build/bundle.js', to: '../../server/public/build' },
+// { from: '../client/build/bundle.js.map', to: '../../server/public/build' },
+// Users/tedshaffer/Documents/Projects/tedword/public/build
+
+/*
+{ from: '../client/build/bundle.js', to: '../../tedword/public/build' },
+{ from: '../client/build/bundle.js.map', to: '../../tedword/public/build' },
+*/
