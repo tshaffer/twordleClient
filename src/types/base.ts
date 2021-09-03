@@ -50,6 +50,10 @@ export interface PuzzlesMap {
   [id: string]: PuzzleEntity; // puzzle id
 }
 
+export interface DisplayedPuzzlesMap {
+  [id: string]: DisplayedPuzzle; // puzzle id
+}
+
 export interface PuzzleExistsByFileNameMap {
   [id: string]: boolean; // sourceFileName
 }
@@ -87,5 +91,18 @@ export interface ParsedClue {
 export interface PuzzlesState {
   puzzlesMetadata: PuzzlesMetadataMap,
   puzzles: PuzzlesMap;
+  displayedPuzzles: DisplayedPuzzlesMap;
+}
+
+export interface DisplayedPuzzleCell {
+  clue: string;
+  answer: string;
+  row: number;
+  col: number;
+}
+
+export interface DisplayedPuzzle {
+  across: PuzzleElementByNumber;
+  down: PuzzleElementByNumber;
 }
 

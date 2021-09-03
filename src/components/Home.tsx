@@ -3,7 +3,7 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { loadPuzzlesMetadata } from '../controllers';
+import { loadPuzzle, loadPuzzlesMetadata } from '../controllers';
 import { PuzzleMetadata  } from '../types';
 
 import { setPuzzleId } from '../models';
@@ -14,6 +14,7 @@ import NewGames from './NewGames';
 export interface HomeProps {
   onLoadPuzzlesMetadata: () => any;
   onSetPuzzleId: (puzzleId: string) => any;
+  onLoadPuzzle: (puzzleId: string) => any;
 }
 
 const Home = (props: HomeProps) => {
@@ -24,6 +25,7 @@ const Home = (props: HomeProps) => {
 
   const handleOpenPuzzle = (puzzleMetadata: PuzzleMetadata) => {
     props.onSetPuzzleId(puzzleMetadata.id);
+    props.onLoadPuzzle(puzzleMetadata.id);
   };
 
 
@@ -77,6 +79,7 @@ function mapStateToProps(state: any) {
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
+    onLoadPuzzle: loadPuzzle,
     onSetPuzzleId: setPuzzleId,
   }, dispatch);
 };

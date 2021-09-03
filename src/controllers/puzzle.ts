@@ -1,28 +1,12 @@
 import axios from 'axios';
-import { PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
+import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
 import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
-
-export const loadPuzzle = (id: string) => {
-  return ((dispatch: any, getState: any): any => {
-    // const path = 'http://localhost:8888/api/v1/puzzle?id=' + id;
-    const path = serverUrl + apiUrlFragment + 'puzzle?id=' + id;
-
-    return axios.get(path)
-      .then((puzzleResponse: any) => {
-        const puzzleEntity: PuzzleEntity = puzzleResponse.data as PuzzleEntity;
-        dispatch(addPuzzle(id, puzzleEntity));
-      });
-  });
-};
+import { addDisplayedPuzzle } from '../models';
 
 export const loadPuzzlesMetadata = () => {
   return (dispatch: any) => {
-    // const path = 'http://localhost:8888/api/v1/allPuzzlesMetadata';
     const path = serverUrl + apiUrlFragment + 'allPuzzlesMetadata';
 
     return axios.get(path)
@@ -39,39 +23,46 @@ export const loadPuzzlesMetadata = () => {
   };
 };
 
-const parsePuzzleFile = (puzFile: File): Promise<PuzzleSpec> => {
+export const loadPuzzle = (id: string) => {
+  return ((dispatch: any, getState: any): any => {
+    const path = serverUrl + apiUrlFragment + 'puzzle?id=' + id;
 
-  return new Promise((resolve, reject) => {
-
-    const fileReader: FileReader = new FileReader();
-
-    // TEDTODO - err event
-    fileReader.onload = function () {
-      const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
-      const puzzleSpec: PuzzleSpec = PuzCrossword.from(puzData);
-      resolve(puzzleSpec);
-    };
-
-    fileReader.readAsArrayBuffer(puzFile);
+    return axios.get(path)
+      .then((puzzleResponse: any) => {
+        const puzzleEntity: PuzzleEntity = puzzleResponse.data as PuzzleEntity;
+        dispatch(addPuzzle(id, puzzleEntity));
+        const displayedPuzzle: DisplayedPuzzle = buildDisplayedPuzzle(puzzleEntity);
+        dispatch(addDisplayedPuzzle(id,displayedPuzzle));
+      });
   });
 };
 
-const parsePuzzleFiles = (puzFiles: File[]): Promise<PuzzleSpec[]> => {
-
-  const puzzleSpecs: PuzzleSpec[] = [];
-
-  const parseNextPuzzleFile = (index: number): Promise<PuzzleSpec[]> => {
-
-    if (index >= puzFiles.length) {
-      return Promise.resolve(puzzleSpecs);
-    }
-
-    return parsePuzzleFile(puzFiles[index])
-      .then((puzzleSpec: PuzzleSpec) => {
-        puzzleSpecs.push(puzzleSpec);
-        return parseNextPuzzleFile(index + 1);
-      });
+export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): DisplayedPuzzle => {
+  
+  const displayedPuzzle: DisplayedPuzzle = {
+    across: {},
+    down: {},
   };
 
-  return parseNextPuzzleFile(0);
+  const parsedClues: ParsedClue[] = puzzleEntity.parsedClues;
+  for (const parsedClue of parsedClues) {
+    const { col, isAcross, row, solution, text } = parsedClue;
+    if (isAcross) {
+      displayedPuzzle.across[parsedClue.number] = {
+        clue: text,
+        answer: solution,
+        row,
+        col,
+      };
+    } else {
+      displayedPuzzle.down[parsedClue.number] = {
+        clue: text,
+        answer: solution,
+        row,
+        col,
+      };
+    }
+  }
+  
+  return displayedPuzzle;
 };
