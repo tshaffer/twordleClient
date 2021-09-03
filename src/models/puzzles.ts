@@ -56,7 +56,6 @@ const initialState: PuzzlesState =
 {
   puzzlesMetadata: {},
   puzzles: {},
-  puzzlesByFileName: {},
 };
 
 export const puzzlesStateReducer = (
@@ -67,7 +66,6 @@ export const puzzlesStateReducer = (
     case ADD_PUZZLE_METADATA: {
       const newState = cloneDeep(state) as PuzzlesState;
       newState.puzzlesMetadata[action.payload.id] = action.payload.puzzleMetadata;
-      newState.puzzlesByFileName[action.payload.puzzleMetadata.sourceFileName] = true;
       return newState;
     }
     case ADD_PUZZLE: {

@@ -87,6 +87,5 @@ export interface ParsedClue {
 export interface PuzzlesState {
   puzzlesMetadata: PuzzlesMetadataMap,
   puzzles: PuzzlesMap;
-  puzzlesByFileName: PuzzleExistsByFileNameMap;
 }
 
