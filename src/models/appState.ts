@@ -64,9 +64,7 @@ export const setBoardId = (
 // ------------------------------------
 
 const initialState: AppState = {
-  userName: '',
   puzzleId: '',
-  boardId: '',
 };
 
 export const appStateReducer = (
@@ -74,14 +72,8 @@ export const appStateReducer = (
   action: TedModelBaseAction< SetUserNamePayload & SetPuzzleIdPayload & SetBoardIdPayload>
 ): AppState => {
   switch (action.type) {
-    case SET_USER_NAME: {
-      return { ...state, userName: action.payload.userName };
-    }
     case SET_PUZZLE_ID: {
       return { ...state, puzzleId: action.payload.puzzleId };
-    }
-    case SET_BOARD_ID: {
-      return { ...state, boardId: action.payload.boardId };
     }
     default:
       return state;

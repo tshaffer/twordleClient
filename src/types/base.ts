@@ -10,29 +10,15 @@ export interface TedCrossState {
 }
 
 export interface AppState {
-  userName: string;
   puzzleId: string;
-  boardId: string;
 }
 
 export interface ActivePuzzleState {
-  activePuzzle: ActivePuzzle | null;
-}
-
-export interface PuzzleCell {
-  clue: string;
-  answer: string;
-  row: number;
-  col: number;
+  activePuzzle: DisplayedPuzzle | null;
 }
 
 export interface PuzzleElementByNumber {
-  [id: number]: PuzzleCell;
-}
-
-export interface ActivePuzzle {
-  across: PuzzleElementByNumber;
-  down: PuzzleElementByNumber;
+  [id: number]: DisplayedPuzzleCell;
 }
 
 export interface PuzzleMetadata {
@@ -52,10 +38,6 @@ export interface PuzzlesMap {
 
 export interface DisplayedPuzzlesMap {
   [id: string]: DisplayedPuzzle; // puzzle id
-}
-
-export interface PuzzleExistsByFileNameMap {
-  [id: string]: boolean; // sourceFileName
 }
 
 export interface PuzzleSpec {

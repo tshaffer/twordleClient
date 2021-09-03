@@ -1,4 +1,4 @@
-import { ActivePuzzle, ActivePuzzleState } from '../types';
+import { DisplayedPuzzle, ActivePuzzleState } from '../types';
 import { TedModelBaseAction } from './baseAction';
 
 // ------------------------------------
@@ -11,11 +11,11 @@ export const SET_ACTIVE_PUZZLE = 'SET_ACTIVE_PUZZLE';
 // ------------------------------------
 
 export interface SetActivePuzzleStatePayload {
-  activePuzzle: ActivePuzzle | null;
+  activePuzzle: DisplayedPuzzle | null;
 }
 
 export const setActivePuzzle = (
-  activePuzzle: ActivePuzzle | null,
+  activePuzzle: DisplayedPuzzle | null,
 ): any => {
   return {
     type: SET_ACTIVE_PUZZLE,
