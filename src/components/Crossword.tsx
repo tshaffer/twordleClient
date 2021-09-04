@@ -125,27 +125,40 @@ const Crossword = (props: CrosswordProps) => {
   */
 
   /*
-min-width: 20rem;
-max-width: 60rem; -Should the size matter?-
-width: auto;
-flex: 2 1 50%;
+const OuterWrapper = styled.div.attrs((props) => ({
+className: `crossword${props.correct ? ' correct' : ''}`,
+}))`
+margin: 0;
+padding: 0;
+border: 0;
+** position: relative; **
+** width: 40%; **
+display: flex;
+flex-direction: row;
+
+@media (max-width: ${(props) => props.theme.columnBreakpoint}) {
+flex-direction: column;
+}
+`;
   */
 
   return (
-    <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
-      <div style={{ margin: 0, padding: 0, position: 'relative' }}>
-        <svg viewBox="0 0 100 100">
-          <rect
-            x={0}
-            y={0}
-            width={100}
-            height={100}
-            fill={'rgb(0,0,0)'}
-          />
-          {cells}
-        </svg>
-      </div>
-    </div >
+    <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
+      <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
+        <div style={{ margin: 0, padding: 0, position: 'relative' }}>
+          <svg viewBox="0 0 100 100">
+            <rect
+              x={0}
+              y={0}
+              width={100}
+              height={100}
+              fill={'rgb(0,0,0)'}
+            />
+            {cells}
+          </svg>
+        </div>
+      </div >
+    </div>
   );
 };
 
