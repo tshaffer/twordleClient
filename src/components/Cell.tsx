@@ -3,7 +3,11 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-export interface CellProps {
+export interface CellPropsFromParent {
+  onClick: () => any;
+}
+
+export interface CellProps extends CellPropsFromParent {
   row: number,
   col: number,
   guess: string,
@@ -60,9 +64,22 @@ used: true
   };
   const cellStyle = fillStyle;
 
+  const handleClick = (event) => {
+    console.log('Cell component - handleClick');
+    console.log(event);
+    event.preventDefault();
+    props.onClick();
+
+    // if (onClick) {
+    //   onClick(cellData);
+    // }
+  };
+
+
   return (
     <g
       style={{ cursor: 'default', fontSize: `${fontSize}px` }}
+      onClick={handleClick}
     >
       <rect
         x={x + cellPadding}

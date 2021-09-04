@@ -10,7 +10,7 @@ import Cell from './Cell';
 import DirectionClues from './DirectionClues';
 
 import { getActivePuzzle } from '../selectors';
-import { bothDirections, createGridData } from '../utilities';
+import { bothDirections, createGridData, otherDirection } from '../utilities';
 
 export interface CrosswordProps {
   activePuzzle: DisplayedPuzzle;
@@ -67,6 +67,41 @@ const Crossword = (props: CrosswordProps) => {
 
   }, [props.activePuzzle]);
 
+  const handleCellClick = (cellData) => {
+    const { row, col } = cellData;
+    const other = otherDirection(currentDirection);
+
+    // should this use moveTo?
+    setFocusedRow(row);
+    setFocusedCol(col);
+
+    let direction = currentDirection;
+
+    // We switch to the "other" direction if (a) the current direction isn't
+    // available in the clicked cell, or (b) we're already focused and the
+    // clicked cell is the focused cell, *and* the other direction is
+    // available.
+    if (
+      !cellData[currentDirection] ||
+      (focused &&
+        row === focusedRow &&
+        col === focusedCol &&
+        cellData[other])
+    ) {
+      setCurrentDirection(other);
+      direction = other;
+    }
+
+    setCurrentNumber(cellData[direction]);
+
+    // if (onFocusedCellChange) {
+    //   onFocusedCellChange(row, col, direction);
+    // }
+
+    focus();
+  };
+
+
   const cells = [];
   if (gridData) {
 
@@ -103,6 +138,7 @@ const Crossword = (props: CrosswordProps) => {
               currentNumber &&
               cellData[currentDirection] === currentNumber
             }
+            onClick={handleCellClick}
           />
         );
       });
@@ -128,31 +164,31 @@ const Crossword = (props: CrosswordProps) => {
 
   /*
   const CluesWrapper = styled.div.attrs((props) => ({
-className: 'clues',
-}))`
-padding: 0 1em;
-flex: 1 2 25%;
-
-@media (max-width: ${(props) => props.theme.columnBreakpoint}) {
-margin-top: 2em;
-}
-
-.direction {
-margin-bottom: 2em;
-** padding: 0 1em;
-flex: 1 1 20%; **
-
-.header {
-margin-top: 0;
-margin-bottom: 0.5em;
-}
-
-div {
-margin-top: 0.5em;
-}
-}
-`;
-*/
+  className: 'clues',
+  }))`
+  padding: 0 1em;
+  flex: 1 2 25%;
+  
+  @media (max-width: ${(props) => props.theme.columnBreakpoint}) {
+  margin-top: 2em;
+  }
+  
+  .direction {
+  margin-bottom: 2em;
+  ** padding: 0 1em;
+  flex: 1 1 20%; **
+  
+  .header {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  }
+  
+  div {
+  margin-top: 0.5em;
+  }
+  }
+  `;
+  */
 
   return (
     <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>

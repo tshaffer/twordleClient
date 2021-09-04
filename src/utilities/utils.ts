@@ -13,6 +13,14 @@ const directionInfo = {
 
 export const bothDirections = Object.keys(directionInfo);
 
+export function isAcross(direction) {
+  return direction === 'across';
+}
+
+export function otherDirection(direction) {
+  return isAcross(direction) ? 'down' : 'across';
+}
+
 export function calculateExtents(data, direction) {
   const dir = directionInfo[direction];
   let primaryMax = 0;

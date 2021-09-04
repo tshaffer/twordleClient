@@ -18,12 +18,17 @@ const ClueWrapper = styled.div.attrs((props) => ({
 export interface ClueProps {
   direction: string,
   number: string;
-  // children: string;
   correct: boolean;
   clueText: string;
 }
 
 const Clue = (props: ClueProps) => {
+
+  const handleClick = (event) => {
+    console.log('Clue component - handleClick');
+    console.log(event);
+    event.preventDefault();
+  };
 
   /*
 const ClueWrapper = styled.div.attrs((props) => ({
@@ -35,7 +40,10 @@ const ClueWrapper = styled.div.attrs((props) => ({
 `;
   */
   return (
-    <div style={{ cursor: 'default', backgroundColor: 'transparent' }}>
+    <div
+      style={{ cursor: 'default', backgroundColor: 'transparent' }}
+      onClick={handleClick}
+    >
       {props.number}: {props.clueText}
     </div>
   );
