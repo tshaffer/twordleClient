@@ -15,6 +15,7 @@ export interface CellProps extends CellPropsFromParent {
   col: number,
   guess: string,
   number: string,
+  focus: boolean,
   highlight: boolean,
 }
 
@@ -62,7 +63,7 @@ const Cell = (props: CellProps) => {
         width={cellInner}
         height={cellInner}
         fill={
-          focus
+          props.focus
             ? focusBackground
             : highlight
               ? highlightBackground

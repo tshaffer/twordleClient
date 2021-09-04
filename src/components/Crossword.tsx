@@ -176,6 +176,15 @@ const Crossword = (props: CrosswordProps) => {
     focus();
   };
 
+  // focus and movement
+  const focus = () => {
+    // if (inputRef.current) {
+    //   inputRef.current.focus();
+    //   setFocused(true);
+    // }
+    setFocused(true);
+  };
+
   const moveTo = (row, col, directionOverride) => {
 
     // let direction = directionOverride ?? currentDirection;
@@ -399,7 +408,6 @@ const Crossword = (props: CrosswordProps) => {
         if (!cellData.used) {
           return;
         }
-        // focus={focused && row === focusedRow && col === focusedCol}
         cells.push(
           <Cell
             // eslint-disable-next-line react/no-array-index-key
@@ -408,6 +416,7 @@ const Crossword = (props: CrosswordProps) => {
             col={cellData.col}
             guess={cellData.guess}
             number={cellData.number}
+            focus={focused && row === focusedRow && col === focusedCol}
             highlight={
               focused &&
               currentNumber &&
@@ -435,7 +444,7 @@ const Crossword = (props: CrosswordProps) => {
                     y={0}
                     width={100}
                     height={100}
-                    fill={'rgb(0,0,0)'}
+                    fill={finalTheme.gridBackground}
                   />
                   {cells}
                 </svg>
