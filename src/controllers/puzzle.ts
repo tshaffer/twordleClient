@@ -4,6 +4,7 @@ import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
 import { addDisplayedPuzzle } from '../models';
+import { setActivePuzzle } from '../models';
 
 export const loadPuzzlesMetadata = () => {
   return (dispatch: any) => {
@@ -33,6 +34,9 @@ export const loadPuzzle = (id: string) => {
         dispatch(addPuzzle(id, puzzleEntity));
         const displayedPuzzle: DisplayedPuzzle = buildDisplayedPuzzle(puzzleEntity);
         dispatch(addDisplayedPuzzle(id,displayedPuzzle));
+        // not the correct way to do this, in my opinion. it should be done when the user chooses
+        // to play ths game
+        dispatch(setActivePuzzle(displayedPuzzle));
       });
   });
 };

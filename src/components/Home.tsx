@@ -8,7 +8,6 @@ import { PuzzleMetadata } from '../types';
 
 import { setPuzzleId } from '../models';
 
-import Cell from './Cell';
 import NewGames from './NewGames';
 import Crossword from './Crossword';
 
