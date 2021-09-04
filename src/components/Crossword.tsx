@@ -124,8 +124,15 @@ const Crossword = (props: CrosswordProps) => {
           />
   */
 
+  /*
+min-width: 20rem;
+max-width: 60rem; -Should the size matter?-
+width: auto;
+flex: 2 1 50%;
+  */
+
   return (
-    <div>
+    <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
       <div style={{ margin: 0, padding: 0, position: 'relative' }}>
         <svg viewBox="0 0 100 100">
           <rect
