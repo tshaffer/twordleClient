@@ -40,12 +40,6 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
 
 const Crossword = (props: CrosswordProps) => {
 
-  const cellSize = 6.66666666667;
-  const cellPadding = 0.125;
-  const cellInner = 6.416666666666667;
-  const cellHalf = 3.3333333333333335;
-  const fontSize = 4.491666666666666;
-
   const [size, setSize] = useState(null);
   const [gridData, setGridData] = useState(null);
   const [clues, setClues] = useState(null);
@@ -377,12 +371,11 @@ const Crossword = (props: CrosswordProps) => {
     focus();
   };
 
-  // TEDTODO - didn't work.
-  // const cellSize = 100 / size;
-  // const cellPadding = 0.125;
-  // const cellInner = cellSize - cellPadding * 2;
-  // const cellHalf = cellSize / 2;
-  // const fontSize = cellInner * 0.7;
+  const cellSize = 100 / size;
+  const cellPadding = 0.125;
+  const cellInner = cellSize - cellPadding * 2;
+  const cellHalf = cellSize / 2;
+  const fontSize = cellInner * 0.7;
 
   const context = {
     focused,
