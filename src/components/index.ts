@@ -1,3 +1,4 @@
+export * from './context';
 export * from './App';
 export * from './Cell';
 export * from './Clue';

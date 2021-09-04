@@ -2,9 +2,8 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-// import styled, { ThemeContext } from 'styled-components';
-
-// import { CrosswordContext } from './context';
+import styled, { ThemeContext } from 'styled-components';
+import { CrosswordContext } from './context';
 /*
 const ClueWrapper = styled.div.attrs((props) => ({
   className: `clue${props.correct ? ' correct' : ''}`,
@@ -23,6 +22,14 @@ export interface ClueProps {
 }
 
 const Clue = (props: ClueProps) => {
+
+  const { highlightBackground } = React.useContext(ThemeContext);
+  const {
+    focused,
+    selectedDirection,
+    selectedNumber,
+    onClueSelected,
+  } = React.useContext(CrosswordContext);
 
   const handleClick = (event) => {
     console.log('Clue component - handleClick');

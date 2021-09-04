@@ -3,6 +3,9 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { ThemeContext } from 'styled-components';
+import { CrosswordSizeContext } from './context';
+
 export interface CellPropsFromParent {
   onClick: (cellData: any) => any;
 }
@@ -17,18 +20,17 @@ export interface CellProps extends CellPropsFromParent {
 
 const Cell = (props: CellProps) => {
 
-  const cellSize = 6.66666666667;
-  const cellPadding = 0.125;
-  const cellInner = 6.416666666666667;
-  const cellHalf = 3.3333333333333335;
-  const fontSize = 4.491666666666666;
-  const cellBackground = 'rgb(255,255,255)';
-
-  const cellBorder = 'rgb(0,0,0)';
-  const textColor = 'rgb(0,0,0)';
-  const numberColor = 'rgba(0,0,0, 0.25)';
-  const focusBackground = 'rgb(255,255,0)';
-  const highlightBackground = 'rgb(255,255,204)';
+  const { cellSize, cellPadding, cellInner, cellHalf, fontSize } = React.useContext(
+    CrosswordSizeContext
+  );
+  const {
+    cellBackground,
+    cellBorder,
+    textColor,
+    numberColor,
+    focusBackground,
+    highlightBackground,
+  } = React.useContext(ThemeContext);
 
   const { row, col, guess, number, highlight } = props;
 
@@ -46,7 +48,7 @@ const Cell = (props: CellProps) => {
     console.log('Cell component - handleClick');
     console.log(event);
     event.preventDefault();
-    props.onClick( { row, col });
+    props.onClick({ row, col });
   };
 
   return (

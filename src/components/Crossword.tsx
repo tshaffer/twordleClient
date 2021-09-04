@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { DisplayedPuzzle } from '../types';
+
+import styled, { ThemeContext, ThemeProvider } from 'styled-components';
 
 import Cell from './Cell';
 import DirectionClues from './DirectionClues';
@@ -12,6 +14,21 @@ import DirectionClues from './DirectionClues';
 import { getActivePuzzle } from '../selectors';
 import { bothDirections, createGridData, isAcross, otherDirection } from '../utilities';
 import { cloneDeep, isNil } from 'lodash';
+
+import { CrosswordContext, CrosswordSizeContext } from './context';
+
+const defaultTheme = {
+  columnBreakpoint: '768px',
+  gridBackground: 'rgb(0,0,0)',
+  cellBackground: 'rgb(255,255,255)',
+  cellBorder: 'rgb(0,0,0)',
+  textColor: 'rgb(0,0,0)',
+  remoteGuessTextColor: 'rgb(255, 0, 255)',
+  numberColor: 'rgba(0,0,0, 0.25)',
+  focusBackground: 'rgb(255,255,0)',
+  highlightBackground: 'rgb(255,255,204)',
+};
+
 
 export interface CrosswordPropsFromParent {
   onCellChange: (row: number, col: number, char: string) => any;
@@ -28,14 +45,6 @@ const Crossword = (props: CrosswordProps) => {
   const cellInner = 6.416666666666667;
   const cellHalf = 3.3333333333333335;
   const fontSize = 4.491666666666666;
-  const cellBackground = 'rgb(255,255,255)';
-
-  const cellBorder = 'rgb(0,0,0)';
-  const textColor = 'rgb(0,0,0)';
-  const numberColor = 'rgba(0,0,0, 0.25)';
-  const focusBackground = 'rgb(255,255,0)';
-  const highlightBackground = 'rgb(255,255,204)';
-
 
   const [size, setSize] = useState(null);
   const [gridData, setGridData] = useState(null);
@@ -85,6 +94,8 @@ const Crossword = (props: CrosswordProps) => {
     // }
 
   }, [props.activePuzzle]);
+
+  const contextTheme = useContext(ThemeContext);
 
   const getCellData = (row, col) => {
     if (row >= 0 && row < size && col >= 0 && col < size) {
@@ -350,7 +361,28 @@ const Crossword = (props: CrosswordProps) => {
     focus();
   };
 
+  const handleClueSelected = (direction, number) => {
+    const info = props.activePuzzle[direction][number];
+    // TODO: sanity-check info?
+    moveTo(info.row, info.col, direction);
+    focus();
+  };
 
+  // TEDTODO - didn't work.
+  // const cellSize = 100 / size;
+  // const cellPadding = 0.125;
+  // const cellInner = cellSize - cellPadding * 2;
+  // const cellHalf = cellSize / 2;
+  // const fontSize = cellInner * 0.7;
+
+  const context = {
+    focused,
+    selectedDirection: currentDirection,
+    selectedNumber: currentNumber,
+    onClueSelected: handleClueSelected,
+  };
+  // const finalTheme = { ...defaultTheme, ...contextTheme, ...theme };
+  const finalTheme = { ...defaultTheme, ...contextTheme };
 
   const cells = [];
   if (gridData) {
@@ -389,67 +421,75 @@ const Crossword = (props: CrosswordProps) => {
   }
 
   return (
-    <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
-      <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
-        <div style={{ margin: 0, padding: 0, position: 'relative' }}>
-          <svg viewBox="0 0 100 100">
-            <rect
-              x={0}
-              y={0}
-              width={100}
-              height={100}
-              fill={'rgb(0,0,0)'}
-            />
-            {cells}
-          </svg>
-          <input
-            aria-label="crossword-input"
-            type="text"
-            onClick={handleInputClick}
-            onKeyDown={handleInputKeyDown}
-            onChange={handleInputChange}
-            value=""
-            // onInput={this.handleInput}
-            autoComplete="off"
-            spellCheck="false"
-            autoCorrect="off"
-            style={{
-              position: 'absolute',
-              // In order to ensure the top/left positioning makes sense,
-              // there is an absolutely-positioned <div> with no
-              // margin/padding that we *don't* expose to consumers.  This
-              // keeps the math much more reliable.  (But we're still
-              // seeing a slight vertical deviation towards the bottom of
-              // the grid!  The "* 0.995" seems to help.)
-              top: `calc(${focusedRow * cellSize * 0.995}% + 2px)`,
-              left: `calc(${focusedCol * cellSize}% + 2px)`,
-              width: `calc(${cellSize}% - 4px)`,
-              height: `calc(${cellSize}% - 4px)`,
-              fontSize: `${fontSize * 6}px`, // waaay too small...?
-              textAlign: 'center',
-              textAnchor: 'middle',
-              backgroundColor: 'transparent',
-              caretColor: 'transparent',
-              margin: 0,
-              padding: 0,
-              border: 0,
-              cursor: 'default',
-            }}
-          />
-        </div>
-      </div >
-      <div style={{ padding: '0 1em', flex: '1 2 25%' }}>
-        {clues &&
-          bothDirections.map((direction) => (
-            <DirectionClues
-              key={direction}
-              direction={direction}
-              clues={clues[direction]}
-            />
-          ))}
+    <CrosswordContext.Provider value={context}>
+      <CrosswordSizeContext.Provider
+        value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
+      >
+        <ThemeProvider theme={finalTheme}>
+          <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
+            <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
+              <div style={{ margin: 0, padding: 0, position: 'relative' }}>
+                <svg viewBox="0 0 100 100">
+                  <rect
+                    x={0}
+                    y={0}
+                    width={100}
+                    height={100}
+                    fill={'rgb(0,0,0)'}
+                  />
+                  {cells}
+                </svg>
+                <input
+                  aria-label="crossword-input"
+                  type="text"
+                  onClick={handleInputClick}
+                  onKeyDown={handleInputKeyDown}
+                  onChange={handleInputChange}
+                  value=""
+                  // onInput={this.handleInput}
+                  autoComplete="off"
+                  spellCheck="false"
+                  autoCorrect="off"
+                  style={{
+                    position: 'absolute',
+                    // In order to ensure the top/left positioning makes sense,
+                    // there is an absolutely-positioned <div> with no
+                    // margin/padding that we *don't* expose to consumers.  This
+                    // keeps the math much more reliable.  (But we're still
+                    // seeing a slight vertical deviation towards the bottom of
+                    // the grid!  The "* 0.995" seems to help.)
+                    top: `calc(${focusedRow * cellSize * 0.995}% + 2px)`,
+                    left: `calc(${focusedCol * cellSize}% + 2px)`,
+                    width: `calc(${cellSize}% - 4px)`,
+                    height: `calc(${cellSize}% - 4px)`,
+                    fontSize: `${fontSize * 6}px`, // waaay too small...?
+                    textAlign: 'center',
+                    textAnchor: 'middle',
+                    backgroundColor: 'transparent',
+                    caretColor: 'transparent',
+                    margin: 0,
+                    padding: 0,
+                    border: 0,
+                    cursor: 'default',
+                  }}
+                />
+              </div>
+            </div >
+            <div style={{ padding: '0 1em', flex: '1 2 25%' }}>
+              {clues &&
+                bothDirections.map((direction) => (
+                  <DirectionClues
+                    key={direction}
+                    direction={direction}
+                    clues={clues[direction]}
+                  />
+                ))}
 
-      </div>
-    </div>
+            </div>
+          </div>
+        </ThemeProvider>
+      </CrosswordSizeContext.Provider>
+    </CrosswordContext.Provider>
   );
 };
 
