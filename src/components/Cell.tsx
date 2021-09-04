@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 export interface CellPropsFromParent {
-  onClick: () => any;
+  onClick: (cellData: any) => any;
 }
 
 export interface CellProps extends CellPropsFromParent {
@@ -68,7 +68,7 @@ used: true
     console.log('Cell component - handleClick');
     console.log(event);
     event.preventDefault();
-    props.onClick();
+    props.onClick( { row, col });
 
     // if (onClick) {
     //   onClick(cellData);

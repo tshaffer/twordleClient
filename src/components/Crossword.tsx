@@ -10,13 +10,32 @@ import Cell from './Cell';
 import DirectionClues from './DirectionClues';
 
 import { getActivePuzzle } from '../selectors';
-import { bothDirections, createGridData, otherDirection } from '../utilities';
+import { bothDirections, createGridData, isAcross, otherDirection } from '../utilities';
+import { cloneDeep, isNil } from 'lodash';
 
-export interface CrosswordProps {
+export interface CrosswordPropsFromParent {
+  onCellChange: (row: number, col: number, char: string) => any;
+}
+
+export interface CrosswordProps extends CrosswordPropsFromParent {
   activePuzzle: DisplayedPuzzle;
 }
 
 const Crossword = (props: CrosswordProps) => {
+
+  const cellSize = 6.66666666667;
+  const cellPadding = 0.125;
+  const cellInner = 6.416666666666667;
+  const cellHalf = 3.3333333333333335;
+  const fontSize = 4.491666666666666;
+  const cellBackground = 'rgb(255,255,255)';
+
+  const cellBorder = 'rgb(0,0,0)';
+  const textColor = 'rgb(0,0,0)';
+  const numberColor = 'rgba(0,0,0, 0.25)';
+  const focusBackground = 'rgb(255,255,0)';
+  const highlightBackground = 'rgb(255,255,204)';
+
 
   const [size, setSize] = useState(null);
   const [gridData, setGridData] = useState(null);
@@ -67,6 +86,51 @@ const Crossword = (props: CrosswordProps) => {
 
   }, [props.activePuzzle]);
 
+  const getCellData = (row, col) => {
+    if (row >= 0 && row < size && col >= 0 && col < size) {
+      return gridData[row][col];
+    }
+
+    // fake cellData to represent "out of bounds"
+    return { row, col, used: false, outOfBounds: true };
+  };
+
+  const setCellCharacter = (row, col, char) => {
+
+    const cell = getCellData(row, col);
+
+    if (!cell.used) {
+      return;
+    }
+
+    // If the character is already the cell's guess, there's nothing to do.
+    if (cell.guess === char) {
+      return;
+    }
+
+    // update the gridData with the guess
+    const tsGridData = cloneDeep(gridData);
+    tsGridData[row][col].guess = char;
+    tsGridData[row][col].guessIsRemote = false;
+    setGridData(tsGridData);
+
+    // push the row/col for checking!
+    // setCheckQueue(
+    //   produce((draft) => {
+    //     draft.push({ row, col });
+    //   })
+    // );
+
+    handleCellChange(row, col, char);
+
+
+    // refreshCompletedAnswers(tsGridData);
+  };
+
+  const handleCellChange = (row: number, col: number, char: string) => {
+    props.onCellChange(row, col, char);
+  };
+
   const handleCellClick = (cellData) => {
     const { row, col } = cellData;
     const other = otherDirection(currentDirection);
@@ -100,6 +164,198 @@ const Crossword = (props: CrosswordProps) => {
 
     focus();
   };
+
+  const moveTo = (row, col, directionOverride) => {
+
+    // let direction = directionOverride ?? currentDirection;
+    let direction: string;
+    if (isNil(directionOverride)) {
+      direction = currentDirection;
+    } else {
+      direction = directionOverride;
+    }
+
+    const candidate = getCellData(row, col);
+
+    if (!candidate.used) {
+      return false;
+    }
+
+    if (!candidate[direction]) {
+      direction = otherDirection(direction);
+    }
+
+    // if (onFocusedCellChange) {
+    //   onFocusedCellChange(row, col, direction);
+    // }
+    setFocusedRow(row);
+    setFocusedCol(col);
+    setCurrentDirection(direction);
+    setCurrentNumber(candidate[direction]);
+
+    return candidate;
+  };
+
+  const moveRelative = (dRow, dCol) => {
+    // We expect *only* one of dRow or dCol to have a non-zero value, and
+    // that's the direction we will "prefer".  If *both* are set (or zero),
+    // we don't change the direction.
+    let direction;
+    if (dRow !== 0 && dCol === 0) {
+      direction = 'down';
+    } else if (dRow === 0 && dCol !== 0) {
+      direction = 'across';
+    }
+
+    const cell = moveTo(focusedRow + dRow, focusedCol + dCol, direction);
+
+    return cell;
+  };
+
+  const moveForward = () => {
+    const across = isAcross(currentDirection);
+    moveRelative(across ? 0 : 1, across ? 1 : 0);
+  };
+
+  const moveBackward = () => {
+    const across = isAcross(currentDirection);
+    moveRelative(across ? 0 : -1, across ? -1 : 0);
+  };
+
+  const handleSingleCharacter = (char) => {
+    setCellCharacter(focusedRow, focusedCol, char.toUpperCase());
+    moveForward();
+  };
+
+
+  // We use the keydown event for control/arrow keys, but not for textual
+  // input, because it's hard to suss out when a key is "regular" or not.
+  const handleInputKeyDown = (event) => {
+
+    console.log('handleInputKeyDown invoked', event);
+
+    // if ctrl, alt, or meta are down, ignore the event (let it bubble)
+    if (event.ctrlKey || event.altKey || event.metaKey) {
+      return;
+    }
+
+    let preventDefault = true;
+    const { key } = event;
+    // console.log('CROSSWORD KEYDOWN', event.key);
+
+    // FUTURE: should we "jump" over black space?  That might help some for
+    // keyboard users.
+    switch (key) {
+      case 'ArrowUp':
+        moveRelative(-1, 0);
+        break;
+
+      case 'ArrowDown':
+        moveRelative(1, 0);
+        break;
+
+      case 'ArrowLeft':
+        moveRelative(0, -1);
+        break;
+
+      case 'ArrowRight':
+        moveRelative(0, 1);
+        break;
+
+      case ' ': // treat space like tab?
+      case 'Tab': {
+        const other = otherDirection(currentDirection);
+        const cellData = getCellData(focusedRow, focusedCol);
+        if (cellData[other]) {
+          setCurrentDirection(other);
+          setCurrentNumber(cellData[other]);
+        }
+        break;
+      }
+
+      // Backspace: delete the current cell, and move to the previous cell
+      // Delete:    delete the current cell, but don't move
+      case 'Backspace':
+      case 'Delete': {
+        setCellCharacter(focusedRow, focusedCol, '');
+        if (key === 'Backspace') {
+          moveBackward();
+        }
+        break;
+      }
+
+      case 'Home':
+      case 'End': {
+
+        // move to beginning/end of this entry?
+        const info = props.activePuzzle[currentDirection][currentNumber];
+        const {
+          answer: { length },
+        } = info;
+        let { row, col } = info;
+        if (key === 'End') {
+          const across = isAcross(currentDirection);
+          if (across) {
+            col += length - 1;
+          } else {
+            row += length - 1;
+          }
+        }
+
+        moveTo(row, col, null);
+        break;
+      }
+
+      default:
+        // It would be nice to handle "regular" characters with onInput, but
+        // that is still experimental, so we can't count on it.  Instead, we
+        // assume that only "length 1" values are regular.
+        if (key.length !== 1) {
+          preventDefault = false;
+          break;
+        }
+
+        handleSingleCharacter(key);
+        break;
+    }
+
+    if (preventDefault) {
+      event.preventDefault();
+    }
+  };
+
+  const handleInputChange = (event) => {
+    console.log('handleInputChange invoked', event);
+
+    event.preventDefault();
+    setBulkChange(event.target.value);
+  };
+
+  const handleInputClick = (event) => {
+
+    console.log('handleInputClick invoked', event);
+
+    // *don't* event.preventDefault(), because we want the input to actually
+    // take focus
+
+    // Like general cell-clicks, cliking on the input can change direction.
+    // Unlike cell clicks, we *know* we're clicking on the already-focused
+    // cell!
+
+    const other = otherDirection(currentDirection);
+    const cellData = getCellData(focusedRow, focusedCol);
+
+    let direction = currentDirection;
+
+    if (focused && cellData[other]) {
+      setCurrentDirection(other);
+      direction = other;
+    }
+
+    setCurrentNumber(cellData[direction]);
+    focus();
+  };
+
 
 
   const cells = [];
@@ -190,6 +446,8 @@ const Crossword = (props: CrosswordProps) => {
   `;
   */
 
+  //             ref={inputRef}
+
   return (
     <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
       <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
@@ -204,6 +462,40 @@ const Crossword = (props: CrosswordProps) => {
             />
             {cells}
           </svg>
+          <input
+            aria-label="crossword-input"
+            type="text"
+            onClick={handleInputClick}
+            onKeyDown={handleInputKeyDown}
+            onChange={handleInputChange}
+            value=""
+            // onInput={this.handleInput}
+            autoComplete="off"
+            spellCheck="false"
+            autoCorrect="off"
+            style={{
+              position: 'absolute',
+              // In order to ensure the top/left positioning makes sense,
+              // there is an absolutely-positioned <div> with no
+              // margin/padding that we *don't* expose to consumers.  This
+              // keeps the math much more reliable.  (But we're still
+              // seeing a slight vertical deviation towards the bottom of
+              // the grid!  The "* 0.995" seems to help.)
+              top: `calc(${focusedRow * cellSize * 0.995}% + 2px)`,
+              left: `calc(${focusedCol * cellSize}% + 2px)`,
+              width: `calc(${cellSize}% - 4px)`,
+              height: `calc(${cellSize}% - 4px)`,
+              fontSize: `${fontSize * 6}px`, // waaay too small...?
+              textAlign: 'center',
+              textAnchor: 'middle',
+              backgroundColor: 'transparent',
+              caretColor: 'transparent',
+              margin: 0,
+              padding: 0,
+              border: 0,
+              cursor: 'default',
+            }}
+          />
         </div>
       </div >
       <div style={{ padding: '0 1em', flex: '1 2 25%' }}>

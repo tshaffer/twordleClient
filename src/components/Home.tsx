@@ -28,6 +28,10 @@ const Home = (props: HomeProps) => {
     props.onLoadPuzzle(puzzleMetadata.id);
   };
 
+  const handleCellChange = (row: number, col: number, char: string) => {
+    console.log('Home#handleCellChange: ', row, col, char);
+  };
+
   return (
     <div>
       <div>
@@ -35,7 +39,9 @@ const Home = (props: HomeProps) => {
           onSelectPuzzle={handleOpenPuzzle}
         />
       </div>
-      <Crossword/>
+      <Crossword
+        onCellChange={handleCellChange}
+      />
     </div>
   );
 };
