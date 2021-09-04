@@ -232,8 +232,6 @@ const Crossword = (props: CrosswordProps) => {
   // input, because it's hard to suss out when a key is "regular" or not.
   const handleInputKeyDown = (event) => {
 
-    console.log('handleInputKeyDown invoked', event);
-
     // if ctrl, alt, or meta are down, ignore the event (let it bubble)
     if (event.ctrlKey || event.altKey || event.metaKey) {
       return;
@@ -325,15 +323,11 @@ const Crossword = (props: CrosswordProps) => {
   };
 
   const handleInputChange = (event) => {
-    console.log('handleInputChange invoked', event);
-
     event.preventDefault();
     setBulkChange(event.target.value);
   };
 
   const handleInputClick = (event) => {
-
-    console.log('handleInputClick invoked', event);
 
     // *don't* event.preventDefault(), because we want the input to actually
     // take focus
@@ -363,21 +357,14 @@ const Crossword = (props: CrosswordProps) => {
 
     bothDirections.every((direction) =>
       clues[direction].every((clueInfo) => {
-        return clueInfo.correct
+        return clueInfo.correct;
       })
     );
 
-    // console.log('render, gridData: ');
-    // console.log(gridData);
-
     gridData.forEach((rowData, row) => {
       rowData.forEach((cellData, col) => {
-        // console.log('row ', row, ', col ', col);
-        // console.log(' cellData:');
-        // console.log(cellData);
 
         if (!cellData.used) {
-          // console.log('unused cell: row ', row, ', col ', col);
           return;
         }
         // focus={focused && row === focusedRow && col === focusedCol}
@@ -400,53 +387,6 @@ const Crossword = (props: CrosswordProps) => {
       });
     });
   }
-
-  /*
-          <Cell
-            row={0}
-            col={0}
-            guess={'x'}
-            number={'1'}
-            highlight={false}
-          />
-          <Cell
-            row={0}
-            col={1}
-            guess={'y'}
-            number={'2'}
-            highlight={true}
-          />
-  */
-
-  /*
-  const CluesWrapper = styled.div.attrs((props) => ({
-  className: 'clues',
-  }))`
-  padding: 0 1em;
-  flex: 1 2 25%;
-  
-  @media (max-width: ${(props) => props.theme.columnBreakpoint}) {
-  margin-top: 2em;
-  }
-  
-  .direction {
-  margin-bottom: 2em;
-  ** padding: 0 1em;
-  flex: 1 1 20%; **
-  
-  .header {
-  margin-top: 0;
-  margin-bottom: 0.5em;
-  }
-  
-  div {
-  margin-top: 0.5em;
-  }
-  }
-  `;
-  */
-
-  //             ref={inputRef}
 
   return (
     <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>

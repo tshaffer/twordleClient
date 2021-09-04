@@ -17,28 +17,6 @@ export interface CellProps extends CellPropsFromParent {
 
 const Cell = (props: CellProps) => {
 
-  /* CellData from debugger
-across: "1"
-answer: "S"
-col: 0
-down: "1"
-guess: "S"
-guessIsRemote: false
-inFullAnswer: true
-locked: false
-number: "1"
-row: 0
-used: true
-  */
-
-  React.useEffect(() => {
-    init();
-  }, []);
-
-  const init = () => {
-    console.log('cell init invoked');
-  };
-
   const cellSize = 6.66666666667;
   const cellPadding = 0.125;
   const cellInner = 6.416666666666667;
@@ -69,12 +47,7 @@ used: true
     console.log(event);
     event.preventDefault();
     props.onClick( { row, col });
-
-    // if (onClick) {
-    //   onClick(cellData);
-    // }
   };
-
 
   return (
     <g
@@ -118,10 +91,6 @@ used: true
       </text>
     </g>
   );
-
-  // return (
-  //   <div>cell</div>
-  // );
 };
 
 function mapStateToProps(state: any) {
