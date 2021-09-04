@@ -4,12 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { loadPuzzle, loadPuzzlesMetadata } from '../controllers';
-import { PuzzleMetadata  } from '../types';
+import { PuzzleMetadata } from '../types';
 
 import { setPuzzleId } from '../models';
 
-// import Cell from './Cell';
+import Cell from './Cell';
 import NewGames from './NewGames';
+import Crossword from './Crossword';
 
 export interface HomeProps {
   onLoadPuzzlesMetadata: () => any;
@@ -28,47 +29,16 @@ const Home = (props: HomeProps) => {
     props.onLoadPuzzle(puzzleMetadata.id);
   };
 
-
   return (
     <div>
-      <NewGames
-        onSelectPuzzle={handleOpenPuzzle}
-      />
+      <div>
+        <NewGames
+          onSelectPuzzle={handleOpenPuzzle}
+        />
+      </div>
+      <Crossword/>
     </div>
   );
-
-  // return (
-  //   <div>
-  //     pizza
-  //     <div style={{ margin: 0, padding: 0, position: 'relative' }}>
-  //       <svg viewBox="0 0 100 100">
-  //         <rect
-  //           x={0}
-  //           y={0}
-  //           width={100}
-  //           height={100}
-  //           fill={'rgb(0,0,0)'}
-  //         />
-  //         <Cell
-  //           row={0}
-  //           col={0}
-  //           guess={'x'}
-  //           number={'1'}
-  //           highlight={false}
-  //         />
-  //         <Cell
-  //           row={0}
-  //           col={1}
-  //           guess={'y'}
-  //           number={'2'}
-  //           highlight={true}
-  //         />
-  //       </svg>
-
-  //     </div>
-
-  //   </div>
-  // );
 };
 
 function mapStateToProps(state: any) {
@@ -85,4 +55,3 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
-
