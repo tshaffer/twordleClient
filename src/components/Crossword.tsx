@@ -8,7 +8,7 @@ import { DisplayedPuzzle } from '../types';
 
 import Cell from './Cell';
 import { getActivePuzzle } from '../selectors';
-import { createGridData } from '../utilities';
+import { bothDirections, createGridData } from '../utilities';
 
 export interface CrosswordProps {
   activePuzzle: DisplayedPuzzle;
@@ -65,18 +65,49 @@ const Crossword = (props: CrosswordProps) => {
 
   }, [props.activePuzzle]);
 
+  const cells = [];
+  if (gridData) {
 
-  return (
-    <div>
-      <div style={{ margin: 0, padding: 0, position: 'relative' }}>
-        <svg viewBox="0 0 100 100">
-          <rect
-            x={0}
-            y={0}
-            width={100}
-            height={100}
-            fill={'rgb(0,0,0)'}
+    bothDirections.every((direction) =>
+      clues[direction].every((clueInfo) => {
+        return clueInfo.correct
+      })
+    );
+
+    // console.log('render, gridData: ');
+    // console.log(gridData);
+
+    gridData.forEach((rowData, row) => {
+      rowData.forEach((cellData, col) => {
+        // console.log('row ', row, ', col ', col);
+        // console.log(' cellData:');
+        // console.log(cellData);
+
+        if (!cellData.used) {
+          // console.log('unused cell: row ', row, ', col ', col);
+          return;
+        }
+        // focus={focused && row === focusedRow && col === focusedCol}
+        cells.push(
+          <Cell
+            // eslint-disable-next-line react/no-array-index-key
+            key={`R${row}C${col}`}
+            row={cellData.row}
+            col={cellData.col}
+            guess={cellData.guess}
+            number={cellData.number}
+            highlight={
+              focused &&
+              currentNumber &&
+              cellData[currentDirection] === currentNumber
+            }
           />
+        );
+      });
+    });
+  }
+
+  /*
           <Cell
             row={0}
             col={0}
@@ -91,6 +122,20 @@ const Crossword = (props: CrosswordProps) => {
             number={'2'}
             highlight={true}
           />
+  */
+
+  return (
+    <div>
+      <div style={{ margin: 0, padding: 0, position: 'relative' }}>
+        <svg viewBox="0 0 100 100">
+          <rect
+            x={0}
+            y={0}
+            width={100}
+            height={100}
+            fill={'rgb(0,0,0)'}
+          />
+          {cells}
         </svg>
       </div>
     </div >

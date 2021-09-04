@@ -11,6 +11,8 @@ const directionInfo = {
   },
 };
 
+export const bothDirections = Object.keys(directionInfo);
+
 export function calculateExtents(data, direction) {
   const dir = directionInfo[direction];
   let primaryMax = 0;
