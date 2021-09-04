@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { DisplayedPuzzle } from '../types';
 
 import Cell from './Cell';
+import DirectionClues from './DirectionClues';
+
 import { getActivePuzzle } from '../selectors';
 import { bothDirections, createGridData } from '../utilities';
 
@@ -125,22 +127,32 @@ const Crossword = (props: CrosswordProps) => {
   */
 
   /*
-const OuterWrapper = styled.div.attrs((props) => ({
-className: `crossword${props.correct ? ' correct' : ''}`,
+  const CluesWrapper = styled.div.attrs((props) => ({
+className: 'clues',
 }))`
-margin: 0;
-padding: 0;
-border: 0;
-** position: relative; **
-** width: 40%; **
-display: flex;
-flex-direction: row;
+padding: 0 1em;
+flex: 1 2 25%;
 
 @media (max-width: ${(props) => props.theme.columnBreakpoint}) {
-flex-direction: column;
+margin-top: 2em;
+}
+
+.direction {
+margin-bottom: 2em;
+** padding: 0 1em;
+flex: 1 1 20%; **
+
+.header {
+margin-top: 0;
+margin-bottom: 0.5em;
+}
+
+div {
+margin-top: 0.5em;
+}
 }
 `;
-  */
+*/
 
   return (
     <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
@@ -158,6 +170,17 @@ flex-direction: column;
           </svg>
         </div>
       </div >
+      <div style={{ padding: '0 1em', flex: '1 2 25%' }}>
+        {clues &&
+          bothDirections.map((direction) => (
+            <DirectionClues
+              key={direction}
+              direction={direction}
+              clues={clues[direction]}
+            />
+          ))}
+
+      </div>
     </div>
   );
 };
