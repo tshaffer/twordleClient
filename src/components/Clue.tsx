@@ -57,7 +57,7 @@ const ClueWrapper = styled.div.attrs((props) => ({
 
   return (
     <div
-      style={{ cursor: 'default', backgroundColor }}
+      style={{ cursor: 'default', backgroundColor, marginTop: '0.5em' }}
       onClick={handleClick}
     >
       {props.number}: {props.clueText}

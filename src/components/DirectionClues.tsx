@@ -34,7 +34,7 @@ const DirectionClues = (props: DirectionClueProps) => {
 
   return (
     <div style={{ marginBottom: '2em' }}>
-      <h3 style={{ marginTop: 0, marginBottom: '0.3em' }}>{props.direction.toUpperCase()}</h3>
+      <h3 style={{ marginTop: 0, marginBottom: '0.5em' }}>{props.direction.toUpperCase()}</h3>
       {props.clues.map(({ number, clue, correct }) => (
         <Clue
           key={number}
