@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import styled, { ThemeContext } from 'styled-components';
 import { CrosswordContext } from './context';
+import { isNil } from 'lodash';
 /*
 const ClueWrapper = styled.div.attrs((props) => ({
   className: `clue${props.correct ? ' correct' : ''}`,
@@ -35,6 +36,10 @@ const Clue = (props: ClueProps) => {
     console.log('Clue component - handleClick');
     console.log(event);
     event.preventDefault();
+    if (!isNil(onClueSelected)) {
+      onClueSelected(props.direction, props.number);
+    }
+
   };
 
   /*
@@ -46,9 +51,13 @@ const ClueWrapper = styled.div.attrs((props) => ({
     props.highlight ? props.highlightBackground : 'transparent'};
 `;
   */
+
+  const isFocused = focused && props.direction === selectedDirection && props.number === selectedNumber;
+  const backgroundColor = isFocused ? highlightBackground : 'transparent';
+
   return (
     <div
-      style={{ cursor: 'default', backgroundColor: 'transparent' }}
+      style={{ cursor: 'default', backgroundColor }}
       onClick={handleClick}
     >
       {props.number}: {props.clueText}

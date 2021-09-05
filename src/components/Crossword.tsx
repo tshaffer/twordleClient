@@ -54,9 +54,6 @@ const Crossword = (props: CrosswordProps) => {
 
   React.useEffect(() => {
 
-    // console.log('Crossword:useEffect');
-    // console.log(tedGuesses);
-
     // eslint-disable-next-line no-shadow
     const { size, gridData, clues } = createGridData(props.activePuzzle);
 
