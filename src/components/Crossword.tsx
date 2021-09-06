@@ -86,6 +86,8 @@ const Crossword = (props: CrosswordProps) => {
 
   }, [props.activePuzzle]);
 
+  const inputRef = React.useRef();
+
   const contextTheme = useContext(ThemeContext);
 
   const getCellData = (row, col) => {
@@ -169,10 +171,10 @@ const Crossword = (props: CrosswordProps) => {
 
   // focus and movement
   const focus = () => {
-    // if (inputRef.current) {
-    //   inputRef.current.focus();
-    //   setFocused(true);
-    // }
+    if (!isNil(inputRef) && !isNil(inputRef.current)) {
+      (inputRef as any).current.focus();
+      setFocused(true);
+    }
     setFocused(true);
   };
 
