@@ -30,16 +30,16 @@ export const setActivePuzzle = (
 };
 
 export interface InitializeGuessGridPayload {
+  guesses: Guesses,
 }
 
-export const initializeGuess = (
+export const initializeGuesses = (
+  guesses: Guesses,
 ): any => {
   return {
     type: INITIALIZE_GUESS_GRID,
     payload: {
-      row,
-      col,
-      puzzleGuess,
+      guesses,
     },
   };
 };
@@ -77,19 +77,18 @@ const initialState: ActivePuzzleState = {
 
 export const activePuzzleStateReducer = (
   state: ActivePuzzleState = initialState,
-  action: TedModelBaseAction<SetActivePuzzleStatePayload & UpdateGuessPayload>
+  action: TedModelBaseAction<SetActivePuzzleStatePayload & InitializeGuessGridPayload & UpdateGuessPayload>
 ): ActivePuzzleState => {
   switch (action.type) {
     case SET_ACTIVE_PUZZLE: {
       return { ...state, activePuzzle: action.payload.activePuzzle };
     }
+    case INITIALIZE_GUESS_GRID: {
+      return { ...state, guesses: action.payload.guesses };
+    }
     case UPDATE_GUESS: {
       const newState = cloneDeep(state);
-      let guesses = newState.guesses;
-      if (isNil(guesses)) {
-        guesses = createEmptyGuessesGrid(state.activePuzzle);
-      }
-      guesses[action.payload.row][action.payload.col] = action.payload.puzzleGuess;
+      newState.guesses[action.payload.row][action.payload.col] = action.payload.puzzleGuess;
       return newState;
     }
     default:

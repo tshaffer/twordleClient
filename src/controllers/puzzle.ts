@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
+import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, Guesses } from '../types';
 import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
-import { addDisplayedPuzzle } from '../models';
+import { addDisplayedPuzzle, initializeGuesses } from '../models';
 import { setActivePuzzle } from '../models';
+import { createEmptyGuessesGrid } from '../utilities';
 
 export const loadPuzzlesMetadata = () => {
   return (dispatch: any) => {
@@ -35,8 +36,11 @@ export const loadPuzzle = (id: string) => {
         const displayedPuzzle: DisplayedPuzzle = buildDisplayedPuzzle(puzzleEntity);
         dispatch(addDisplayedPuzzle(id,displayedPuzzle));
         // not the correct way to do this, in my opinion. it should be done when the user chooses
-        // to play ths game
+        // to play the game
         dispatch(setActivePuzzle(displayedPuzzle));
+
+        const guesses = createEmptyGuessesGrid(displayedPuzzle);
+        dispatch(initializeGuesses(guesses));
       });
   });
 };

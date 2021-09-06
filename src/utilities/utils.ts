@@ -135,8 +135,8 @@ export const createGridData = (data: DisplayedPuzzle) => {
 
 export const createEmptyGuessesGrid = (displayedPuzzle: DisplayedPuzzle): Guesses => {
 
-  const rowCount = calculateExtents(displayedPuzzle.across, 'across');
-  const colCount = calculateExtents(displayedPuzzle.down, 'down');
+  const rowCount = calculateExtents(displayedPuzzle, 'across');
+  const colCount = calculateExtents(displayedPuzzle, 'down');
 
   const size =
     Math.max(...Object.values(rowCount), ...Object.values(colCount)) + 1;
