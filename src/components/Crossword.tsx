@@ -32,6 +32,7 @@ const defaultTheme = {
 
 export interface CrosswordPropsFromParent {
   onCellChange: (row: number, col: number, char: string) => any;
+  // onGuessChange: (row: number, col: number, )
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
@@ -125,14 +126,9 @@ const Crossword = (props: CrosswordProps) => {
     //   })
     // );
 
-    handleCellChange(row, col, char);
-
+    props.onCellChange(row, col, char);
 
     // refreshCompletedAnswers(tsGridData);
-  };
-
-  const handleCellChange = (row: number, col: number, char: string) => {
-    props.onCellChange(row, col, char);
   };
 
   const handleCellClick = (cellData) => {

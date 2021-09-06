@@ -15,10 +15,7 @@ export interface AppState {
 
 export interface ActivePuzzleState {
   activePuzzle: DisplayedPuzzle | null;
-}
-
-export interface PuzzleElementByNumber {
-  [id: number]: DisplayedPuzzleCell;
+  guesses: Guesses | null;
 }
 
 export interface PuzzleMetadata {
@@ -83,8 +80,21 @@ export interface DisplayedPuzzleCell {
   col: number;
 }
 
+export interface PuzzleElementByNumber {
+  [id: number]: DisplayedPuzzleCell;
+}
+
 export interface DisplayedPuzzle {
   across: PuzzleElementByNumber;
   down: PuzzleElementByNumber;
 }
+
+export interface CellGuess {
+  guess: string;
+  guessIsRemote: boolean;
+  remoteUser: string | null;
+}
+
+export type GuessesInRow = CellGuess[];
+export type Guesses = GuessesInRow[];
 

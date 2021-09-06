@@ -1,4 +1,5 @@
-import { DisplayedPuzzle } from '../types';
+import { cloneDeep } from 'lodash';
+import { CellGuess, DisplayedPuzzle, Guesses, GuessesInRow } from '../types';
 
 const directionInfo = {
   across: {
@@ -131,4 +132,29 @@ export const createGridData = (data: DisplayedPuzzle) => {
 
   return { size, gridData, clues };
 };
+
+export const createEmptyGuessesGrid = (displayedPuzzle: DisplayedPuzzle): Guesses => {
+
+  const rowCount = calculateExtents(displayedPuzzle.across, 'across');
+  const colCount = calculateExtents(displayedPuzzle.down, 'down');
+
+  const size =
+    Math.max(...Object.values(rowCount), ...Object.values(colCount)) + 1;
+
+  const emptyCellGuess: CellGuess = {
+    guess: '',
+    guessIsRemote: false,
+    remoteUser: null,
+  };
+  const guesses: Guesses = [];
+  for (let row = 0; row < size; row++) {
+    const guessesInRow: GuessesInRow = [];
+    for (let col = 0; col < size; col++) {
+      guessesInRow.push(cloneDeep(emptyCellGuess));
+    }
+    guesses.push(guessesInRow);
+  }
+  return guesses;
+};
+
 
