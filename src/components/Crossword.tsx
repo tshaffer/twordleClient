@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { DisplayedPuzzle } from '../types';
+import { DisplayedPuzzle, GridDataState } from '../types';
 
 import styled, { ThemeContext, ThemeProvider } from 'styled-components';
 
@@ -16,6 +16,7 @@ import { bothDirections, createGridData, isAcross, otherDirection } from '../uti
 import { cloneDeep, isNil } from 'lodash';
 
 import { CrosswordContext, CrosswordSizeContext } from './context';
+import { getGridDataState } from '../selectors';
 
 const defaultTheme = {
   columnBreakpoint: '768px',
@@ -37,6 +38,7 @@ export interface CrosswordPropsFromParent {
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
   activePuzzle: DisplayedPuzzle;
+  gridDataState: GridDataState;
 }
 
 const Crossword = (props: CrosswordProps) => {
@@ -56,7 +58,9 @@ const Crossword = (props: CrosswordProps) => {
   React.useEffect(() => {
 
     // eslint-disable-next-line no-shadow
-    const { size, gridData, clues } = createGridData(props.activePuzzle);
+    // const { size, gridData, clues } = createGridData(props.activePuzzle);
+    const { size, gridData, clues } = props.gridDataState;
+    console.log(size, gridData, clues);
 
     // let loadedCorrect;
 
@@ -85,7 +89,7 @@ const Crossword = (props: CrosswordProps) => {
     //   onLoadedCorrect(loadedCorrect);
     // }
 
-  }, [props.activePuzzle]);
+  }, [props.activePuzzle, props.gridDataState]);
 
   const inputRef = React.useRef();
 
@@ -493,6 +497,7 @@ const Crossword = (props: CrosswordProps) => {
 function mapStateToProps(state: any) {
   return {
     activePuzzle: getActivePuzzle(state),
+    gridDataState: getGridDataState(state),
   };
 }
 

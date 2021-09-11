@@ -40,8 +40,6 @@ export const loadPuzzle = (id: string) => {
         // to play the game
         dispatch(setActivePuzzle(displayedPuzzle));
 
-        debugger;
-
         const { size, gridData, clues } = createGridData(displayedPuzzle);
         const gridDataState: GridDataState = {
           size,

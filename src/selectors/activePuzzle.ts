@@ -2,6 +2,7 @@ import { isNil } from 'lodash';
 import {
   TedCrossState,
   DisplayedPuzzle,
+  GridDataState,
 } from '../types';
 
 export const getActivePuzzle = (state: TedCrossState): DisplayedPuzzle => {
@@ -14,4 +15,20 @@ export const getActivePuzzle = (state: TedCrossState): DisplayedPuzzle => {
     return state.activePuzzleState.activePuzzle;
   }
 };
+
+export const getGridDataState = (state: TedCrossState): GridDataState => {
+  if (isNil(state.activePuzzleState.gridDataState)) {
+    return {
+      size: 0,
+      gridData: [],
+      clues: {
+        across: [],
+        down: [],
+      }
+    }
+  } else {
+    return state.activePuzzleState.gridDataState;
+  }
+};
+
 
