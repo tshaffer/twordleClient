@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, Guesses } from '../types';
+import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, Guesses, GridDataState } from '../types';
 import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
 import { addDisplayedPuzzle, initializeGuesses } from '../models';
 import { setActivePuzzle } from '../models';
-import { createEmptyGuessesGrid } from '../utilities';
+import { createEmptyGuessesGrid, createGridData } from '../utilities';
+import { setGridDataState } from '../models';
 
 export const loadPuzzlesMetadata = () => {
   return (dispatch: any) => {
@@ -39,6 +40,15 @@ export const loadPuzzle = (id: string) => {
         // to play the game
         dispatch(setActivePuzzle(displayedPuzzle));
 
+        debugger;
+
+        const { size, gridData, clues } = createGridData(displayedPuzzle);
+        const gridDataState: GridDataState = {
+          size,
+          gridData,
+          clues
+        };
+        dispatch(setGridDataState(gridDataState));
         const guesses = createEmptyGuessesGrid(displayedPuzzle);
         dispatch(initializeGuesses(guesses));
       });
