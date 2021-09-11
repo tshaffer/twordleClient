@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { loadPuzzle, loadPuzzlesMetadata } from '../controllers';
-import { PuzzleMetadata } from '../types';
+import { CellGuess, PuzzleMetadata } from '../types';
 
-import { setPuzzleId } from '../models';
+import { setPuzzleId, updateGuess } from '../models';
 
 import NewGames from './NewGames';
 import Crossword from './Crossword';
@@ -15,6 +15,7 @@ export interface HomeProps {
   onLoadPuzzlesMetadata: () => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onLoadPuzzle: (puzzleId: string) => any;
+  onUpdateGuess: (row: number, col: number, puzzleGuess: CellGuess) => any;
 }
 
 const Home = (props: HomeProps) => {
@@ -28,9 +29,20 @@ const Home = (props: HomeProps) => {
     props.onLoadPuzzle(puzzleMetadata.id);
   };
 
-  const handleCellChange = (row: number, col: number, char: string) => {
-    console.log('Home#handleCellChange: ', row, col, char);
+  // const handleCellChange = (row: number, col: number, char: string) => {
+  //   console.log('Home#handleCellChange: ', row, col, char);
+  // };
+
+  const handleUpdateGuess = (row: number, col: number, char: string) => {
+    console.log('Home#handleUpdateGuess: ', row, col, char);
+    props.onUpdateGuess(row, col, {
+      guess: char,
+      guessIsRemote: false,
+      remoteUser: null,
+    });
   };
+
+  //         onCellChange={handleCellChange}
 
   return (
     <div>
@@ -40,7 +52,7 @@ const Home = (props: HomeProps) => {
         />
       </div>
       <Crossword
-        onCellChange={handleCellChange}
+        onUpdateGuess={handleUpdateGuess}
       />
     </div>
   );
@@ -56,6 +68,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadPuzzle: loadPuzzle,
     onSetPuzzleId: setPuzzleId,
+    onUpdateGuess: updateGuess,
   }, dispatch);
 };
 

@@ -32,7 +32,8 @@ const defaultTheme = {
 
 
 export interface CrosswordPropsFromParent {
-  onCellChange: (row: number, col: number, char: string) => any;
+  // onCellChange: (row: number, col: number, char: string) => any;
+  onUpdateGuess: (row: number, col: number, char: string) => any;
   // onGuessChange: (row: number, col: number, )
 }
 
@@ -105,36 +106,36 @@ const Crossword = (props: CrosswordProps) => {
     return { row, col, used: false, outOfBounds: true };
   };
 
-  const setCellCharacter = (row, col, char) => {
+  // const setCellCharacter = (row, col, char) => {
 
-    const cell = getCellData(row, col);
+  //   const cell = getCellData(row, col);
 
-    if (!cell.used) {
-      return;
-    }
+  //   if (!cell.used) {
+  //     return;
+  //   }
 
-    // If the character is already the cell's guess, there's nothing to do.
-    if (cell.guess === char) {
-      return;
-    }
+  //   // If the character is already the cell's guess, there's nothing to do.
+  //   if (cell.guess === char) {
+  //     return;
+  //   }
 
-    // update the gridData with the guess
-    const tsGridData = cloneDeep(gridData);
-    tsGridData[row][col].guess = char;
-    tsGridData[row][col].guessIsRemote = false;
-    setGridData(tsGridData);
+  //   // update the gridData with the guess
+  //   const tsGridData = cloneDeep(gridData);
+  //   tsGridData[row][col].guess = char;
+  //   tsGridData[row][col].guessIsRemote = false;
+  //   setGridData(tsGridData);
 
-    // push the row/col for checking!
-    // setCheckQueue(
-    //   produce((draft) => {
-    //     draft.push({ row, col });
-    //   })
-    // );
+  //   // push the row/col for checking!
+  //   // setCheckQueue(
+  //   //   produce((draft) => {
+  //   //     draft.push({ row, col });
+  //   //   })
+  //   // );
 
-    props.onCellChange(row, col, char);
+  //   props.onCellChange(row, col, char);
 
-    // refreshCompletedAnswers(tsGridData);
-  };
+  //   // refreshCompletedAnswers(tsGridData);
+  // };
 
   const handleCellClick = (cellData) => {
     const { row, col } = cellData;
@@ -237,7 +238,8 @@ const Crossword = (props: CrosswordProps) => {
   };
 
   const handleSingleCharacter = (char) => {
-    setCellCharacter(focusedRow, focusedCol, char.toUpperCase());
+    props.onUpdateGuess(focusedRow, focusedCol, char.toUpperCase());
+    // setCellCharacter(focusedRow, focusedCol, char.toUpperCase());
     moveForward();
   };
 
@@ -289,7 +291,8 @@ const Crossword = (props: CrosswordProps) => {
       // Delete:    delete the current cell, but don't move
       case 'Backspace':
       case 'Delete': {
-        setCellCharacter(focusedRow, focusedCol, '');
+        // setCellCharacter(focusedRow, focusedCol, '');
+        props.onUpdateGuess(focusedRow, focusedCol, '');
         if (key === 'Backspace') {
           moveBackward();
         }

@@ -46,8 +46,8 @@ const Cell = (props: CellProps) => {
   const cellStyle = fillStyle;
 
   const handleClick = (event) => {
-    console.log('Cell component - handleClick');
-    console.log(event);
+    // console.log('Cell component - handleClick');
+    // console.log(event);
     event.preventDefault();
     props.onClick({ row, col });
   };
