@@ -4,14 +4,14 @@ import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { DisplayedPuzzle, GridDataState } from '../types';
+import { DisplayedPuzzle, GridDataState, Guesses } from '../types';
 
 import styled, { ThemeContext, ThemeProvider } from 'styled-components';
 
 import Cell from './Cell';
 import DirectionClues from './DirectionClues';
 
-import { getActivePuzzle } from '../selectors';
+import { getActivePuzzle, getGuesses } from '../selectors';
 import { bothDirections, createGridData, isAcross, otherDirection } from '../utilities';
 import { cloneDeep, isNil } from 'lodash';
 
@@ -39,6 +39,7 @@ export interface CrosswordPropsFromParent {
 export interface CrosswordProps extends CrosswordPropsFromParent {
   activePuzzle: DisplayedPuzzle;
   gridDataState: GridDataState;
+  guesses: Guesses;
 }
 
 const Crossword = (props: CrosswordProps) => {
@@ -498,6 +499,7 @@ function mapStateToProps(state: any) {
   return {
     activePuzzle: getActivePuzzle(state),
     gridDataState: getGridDataState(state),
+    guesses: getGuesses(state),
   };
 }
 
