@@ -5,6 +5,7 @@ export const apiUrlFragment = '/api/v1/';
 
 export interface TedCrossState {
   activePuzzleState: ActivePuzzleState | null;
+  guessesState: GuessesState;
   appState: AppState;
   puzzlesState: PuzzlesState,
 }
@@ -73,6 +74,9 @@ export interface ParsedClue {
 export interface ActivePuzzleState {
   activePuzzle: DisplayedPuzzle | null;
   gridDataState: GridDataState | null;
+}
+
+export interface GuessesState {
   guesses: Guesses | null;
 }
 

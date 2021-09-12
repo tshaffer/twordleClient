@@ -33,11 +33,11 @@ export const getGridDataState = (state: TedCrossState): GridDataState => {
 };
 
 export const getGuesses = (state: TedCrossState): Guesses | null => {
-  if (isNil(state.activePuzzleState.guesses)) {
+  if (isNil(state.guessesState.guesses)) {
     return [];
 
   } else {
-    return state.activePuzzleState.guesses;
+    return state.guessesState.guesses;
   }
 };
 
