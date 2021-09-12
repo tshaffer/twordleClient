@@ -93,6 +93,13 @@ const Crossword = (props: CrosswordProps) => {
 
   }, [props.activePuzzle, props.gridDataState]);
 
+  React.useEffect(() => {
+
+    console.log('useEffect on props.guesses change');
+    console.log(props.guesses);
+
+  }, [props.guesses]);
+
   const inputRef = React.useRef();
 
   const contextTheme = useContext(ThemeContext);
