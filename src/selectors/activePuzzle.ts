@@ -3,7 +3,7 @@ import {
   TedCrossState,
   DisplayedPuzzle,
   GridDataState,
-  Guesses,
+  GuessesGrid,
 } from '../types';
 
 export const getActivePuzzle = (state: TedCrossState): DisplayedPuzzle => {
@@ -32,12 +32,12 @@ export const getGridDataState = (state: TedCrossState): GridDataState => {
   }
 };
 
-export const getGuesses = (state: TedCrossState): Guesses | null => {
-  if (isNil(state.guessesState.guesses)) {
+export const getGuesses = (state: TedCrossState): GuessesGrid | null => {
+  if (isNil(state.guessesState.guessesGrid)) {
     return [];
 
   } else {
-    return state.guessesState.guesses;
+    return state.guessesState.guessesGrid;
   }
 };
 

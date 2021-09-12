@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { loadPuzzle, loadPuzzlesMetadata } from '../controllers';
-import { CellGuess, PuzzleMetadata } from '../types';
+import { Guess, PuzzleMetadata } from '../types';
 
 import { setPuzzleId, updateGuess } from '../models';
 
@@ -15,7 +15,7 @@ export interface HomeProps {
   onLoadPuzzlesMetadata: () => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onLoadPuzzle: (puzzleId: string) => any;
-  onUpdateGuess: (row: number, col: number, puzzleGuess: CellGuess) => any;
+  onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
 }
 
 const Home = (props: HomeProps) => {
@@ -31,7 +31,7 @@ const Home = (props: HomeProps) => {
 
   const handleUpdateGuess = (row: number, col: number, char: string) => {
     props.onUpdateGuess(row, col, {
-      guess: char,
+      value: char,
       guessIsRemote: false,
       remoteUser: null,
     });

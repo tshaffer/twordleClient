@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { GuessesState, CellGuess, Guesses } from '../types';
+import { GuessesState, Guess, GuessesGrid } from '../types';
 import { TedModelBaseAction } from './baseAction';
 
 // ------------------------------------
@@ -13,11 +13,11 @@ export const UPDATE_GUESS = 'UPDATE_GUESS';
 // ------------------------------------
 
 export interface InitializeGuessGridPayload {
-  guesses: Guesses,
+  guesses: GuessesGrid,
 }
 
 export const initializeGuesses = (
-  guesses: Guesses,
+  guesses: GuessesGrid,
 ): any => {
   return {
     type: INITIALIZE_GUESS_GRID,
@@ -30,13 +30,13 @@ export const initializeGuesses = (
 export interface UpdateGuessPayload {
   row: number;
   col: number;
-  puzzleGuess: CellGuess;
+  puzzleGuess: Guess;
 }
 
 export const updateGuess = (
   row: number,
   col: number,
-  puzzleGuess: CellGuess,
+  puzzleGuess: Guess,
 ): any => {
   return {
     type: UPDATE_GUESS,
@@ -53,7 +53,7 @@ export const updateGuess = (
 // ------------------------------------
 
 const initialState: GuessesState = {
-  guesses: null,
+  guessesGrid: null,
 };
 
 export const guessesStateReducer = (
@@ -62,11 +62,11 @@ export const guessesStateReducer = (
 ): GuessesState => {
   switch (action.type) {
     case INITIALIZE_GUESS_GRID: {
-      return { ...state, guesses: action.payload.guesses };
+      return { ...state, guessesGrid: action.payload.guesses };
     }
     case UPDATE_GUESS: {
       const newState = cloneDeep(state);
-      newState.guesses[action.payload.row][action.payload.col] = action.payload.puzzleGuess;
+      newState.guessesGrid[action.payload.row][action.payload.col] = action.payload.puzzleGuess;
       return newState;
     }
     default:

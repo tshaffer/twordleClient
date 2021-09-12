@@ -1,12 +1,12 @@
 import { cloneDeep } from 'lodash';
 import {
-  CellGuess,
+  Guess,
   DisplayedPuzzle,
   GridDataElement,
   GridDataElementsInRow,
   GridDataType,
-  Guesses,
-  GuessesInRow,
+  GuessesGrid,
+  RowOfGuesses,
   GridDataState,
   Clues,
   DisplayedPuzzleCell
@@ -151,7 +151,7 @@ export const createGridData = (data: DisplayedPuzzle): GridDataState => {
   return gridDataState;
 };
 
-export const createEmptyGuessesGrid = (displayedPuzzle: DisplayedPuzzle): Guesses => {
+export const createEmptyGuessesGrid = (displayedPuzzle: DisplayedPuzzle): GuessesGrid => {
 
   // TEDTODO - type
   const rowCount = calculateExtents(displayedPuzzle, 'across');
@@ -160,14 +160,14 @@ export const createEmptyGuessesGrid = (displayedPuzzle: DisplayedPuzzle): Guesse
   const size: number =
     Math.max(...Object.values(rowCount), ...Object.values(colCount)) + 1;
 
-  const emptyCellGuess: CellGuess = {
-    guess: '',
+  const emptyCellGuess: Guess = {
+    value: '',
     guessIsRemote: false,
     remoteUser: null,
   };
-  const guesses: Guesses = [];
+  const guesses: GuessesGrid = [];
   for (let row = 0; row < size; row++) {
-    const guessesInRow: GuessesInRow = [];
+    const guessesInRow: RowOfGuesses = [];
     for (let col = 0; col < size; col++) {
       guessesInRow.push(cloneDeep(emptyCellGuess));
     }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, Guesses, GridDataState } from '../types';
+import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, GuessesGrid, GridDataState } from '../types';
 import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';

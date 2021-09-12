@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { CellGuess, DisplayedPuzzle, GridDataState, Guesses } from '../types';
+import { Guess, DisplayedPuzzle, GridDataState, GuessesGrid } from '../types';
 
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
@@ -37,7 +37,7 @@ export interface CrosswordPropsFromParent {
 export interface CrosswordProps extends CrosswordPropsFromParent {
   activePuzzle: DisplayedPuzzle;
   gridDataState: GridDataState;
-  guesses: Guesses;
+  guesses: GuessesGrid;
 }
 
 const Crossword = (props: CrosswordProps) => {
@@ -339,9 +339,9 @@ const Crossword = (props: CrosswordProps) => {
     gridData.forEach((rowData, row) => {
       rowData.forEach((cellData, col) => {
 
-        const guess: CellGuess = props.guesses[row][col];
+        const guess: Guess = props.guesses[row][col];
 
-        cellData.guess = guess.guess;
+        cellData.guess = guess.value;
 
         if (!cellData.used) {
           return;
