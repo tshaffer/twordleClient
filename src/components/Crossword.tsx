@@ -4,16 +4,16 @@ import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { DisplayedPuzzle, GridDataState, Guesses } from '../types';
+import { CellGuess, DisplayedPuzzle, GridDataState, Guesses } from '../types';
 
-import styled, { ThemeContext, ThemeProvider } from 'styled-components';
+import { ThemeContext, ThemeProvider } from 'styled-components';
 
 import Cell from './Cell';
 import DirectionClues from './DirectionClues';
 
 import { getActivePuzzle, getGuesses } from '../selectors';
-import { bothDirections, createGridData, isAcross, otherDirection } from '../utilities';
-import { cloneDeep, isNil } from 'lodash';
+import { bothDirections, isAcross, otherDirection } from '../utilities';
+import { isNil } from 'lodash';
 
 import { CrosswordContext, CrosswordSizeContext } from './context';
 import { getGridDataState } from '../selectors';
@@ -62,7 +62,6 @@ const Crossword = (props: CrosswordProps) => {
     // eslint-disable-next-line no-shadow
     // const { size, gridData, clues } = createGridData(props.activePuzzle);
     const { size, gridData, clues } = props.gridDataState;
-    console.log(size, gridData, clues);
 
     // let loadedCorrect;
 
@@ -407,6 +406,10 @@ const Crossword = (props: CrosswordProps) => {
 
     gridData.forEach((rowData, row) => {
       rowData.forEach((cellData, col) => {
+
+        const guess: CellGuess = props.guesses[row][col];
+
+        cellData.guess = guess.guess;
 
         if (!cellData.used) {
           return;
