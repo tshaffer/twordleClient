@@ -1,19 +1,19 @@
 import { isNil } from 'lodash';
 import {
   TedCrossState,
-  DisplayedPuzzle,
+  CluesByDirection,
   GridDataState,
   GuessesGrid,
 } from '../types';
 
-export const getActivePuzzle = (state: TedCrossState): DisplayedPuzzle => {
-  if (isNil(state.activePuzzleState.activePuzzle)) {
+export const getActivePuzzle = (state: TedCrossState): CluesByDirection => {
+  if (isNil(state.activePuzzleState.crosswordClues)) {
     return {
       across: {},
       down: {},
     }
   } else {
-    return state.activePuzzleState.activePuzzle;
+    return state.activePuzzleState.crosswordClues;
   }
 };
 

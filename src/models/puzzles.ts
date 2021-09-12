@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { PuzzleMetadata, PuzzleEntity, PuzzlesState, DisplayedPuzzle } from '../types';
+import { PuzzleMetadata, PuzzleEntity, PuzzlesState, CluesByDirection } from '../types';
 import { TedModelBaseAction } from './baseAction';
 
 // ------------------------------------
@@ -51,12 +51,12 @@ export const addPuzzle = (
 
 export interface AddDisplayedPuzzlePayload {
   id: string;
-  displayedPuzzle: DisplayedPuzzle;
+  displayedPuzzle: CluesByDirection;
 }
 
 export const addDisplayedPuzzle = (
   id: string,
-  displayedPuzzle: DisplayedPuzzle
+  displayedPuzzle: CluesByDirection
 ): any => {
   return {
     type: ADD_DISPLAYED_PUZZLE,

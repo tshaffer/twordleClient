@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Guess, DisplayedPuzzle, GridDataState, GuessesGrid, RenderableCell } from '../types';
+import { Guess, CluesByDirection, GridDataState, GuessesGrid, GridSquare, GridSquareSpec } from '../types';
 
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
@@ -35,7 +35,7 @@ export interface CrosswordPropsFromParent {
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
-  activePuzzle: DisplayedPuzzle;
+  activePuzzle: CluesByDirection;
   gridDataState: GridDataState;
   guesses: GuessesGrid;
 }
@@ -321,7 +321,7 @@ const Crossword = (props: CrosswordProps) => {
 
     props.gridDataState.gridData.forEach((rowData, row) => {
 
-      rowData.forEach((gridDataElement, col) => {
+      rowData.forEach((gridSquareSpec: GridSquareSpec, col: number) => {
 
         let guess: Guess;
         if (props.guesses.length > 0 && row < rowData.length) {
@@ -333,36 +333,35 @@ const Crossword = (props: CrosswordProps) => {
             remoteUser: null
           };
         }
-        // const guess: Guess = props.guesses[row][col];
 
-        const renderableCell: RenderableCell = {
-          used: gridDataElement.used,
-          number: gridDataElement.number,
-          answer: gridDataElement.answer,
-          locked: gridDataElement.locked,
-          row: gridDataElement.row,
-          col: gridDataElement.col,
-          across: gridDataElement.across,
-          down: gridDataElement.down,
+        const gridSquare: GridSquare = {
+          used: gridSquareSpec.used,
+          number: gridSquareSpec.number,
+          answer: gridSquareSpec.answer,
+          locked: gridSquareSpec.locked,
+          row: gridSquareSpec.row,
+          col: gridSquareSpec.col,
+          across: gridSquareSpec.across,
+          down: gridSquareSpec.down,
           guess: guess.value,
         };
 
-        if (!renderableCell.used) {
+        if (!gridSquare.used) {
           return;
         }
         cells.push(
           <Cell
             // eslint-disable-next-line react/no-array-index-key
             key={`R${row}C${col}`}
-            row={renderableCell.row}
-            col={renderableCell.col}
-            guess={renderableCell.guess}
-            number={renderableCell.number}
+            row={gridSquare.row}
+            col={gridSquare.col}
+            guess={gridSquare.guess}
+            number={gridSquare.number}
             focus={focused && row === focusedRow && col === focusedCol}
             highlight={
               focused &&
               currentNumber &&
-              renderableCell[currentDirection] === currentNumber
+              gridSquare[currentDirection] === currentNumber
             }
             onClick={handleCellClick}
           />

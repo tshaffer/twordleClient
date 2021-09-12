@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DisplayedPuzzle, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, GuessesGrid, GridDataState } from '../types';
+import { CluesByDirection, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, GuessesGrid, GridDataState } from '../types';
 import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
@@ -34,7 +34,7 @@ export const loadPuzzle = (id: string) => {
       .then((puzzleResponse: any) => {
         const puzzleEntity: PuzzleEntity = puzzleResponse.data as PuzzleEntity;
         dispatch(addPuzzle(id, puzzleEntity));
-        const displayedPuzzle: DisplayedPuzzle = buildDisplayedPuzzle(puzzleEntity);
+        const displayedPuzzle: CluesByDirection = buildDisplayedPuzzle(puzzleEntity);
         dispatch(addDisplayedPuzzle(id,displayedPuzzle));
         // not the correct way to do this, in my opinion. it should be done when the user chooses
         // to play the game
@@ -53,9 +53,9 @@ export const loadPuzzle = (id: string) => {
   });
 };
 
-export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): DisplayedPuzzle => {
+export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirection => {
   
-  const displayedPuzzle: DisplayedPuzzle = {
+  const displayedPuzzle: CluesByDirection = {
     across: {},
     down: {},
   };
