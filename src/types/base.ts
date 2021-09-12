@@ -112,6 +112,10 @@ export interface GridDataElement {
 export type GridDataElementsInRow = GridDataElement[];
 export type GridDataType = GridDataElementsInRow[];
 
+export interface RenderableCell extends GridDataElement {
+  guess: string;
+}
+
 export interface GridDataState {
   size: number;
   gridData: GridDataType;

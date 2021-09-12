@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Guess, DisplayedPuzzle, GridDataState, GuessesGrid } from '../types';
+import { Guess, DisplayedPuzzle, GridDataState, GuessesGrid, RenderableCell } from '../types';
 
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
@@ -312,6 +312,10 @@ const Crossword = (props: CrosswordProps) => {
     focus();
   };
 
+  if (size === 0) {
+    return null;
+  }
+
   const cellSize = 100 / size;
   const cellPadding = 0.125;
   const cellInner = cellSize - cellPadding * 2;
@@ -336,29 +340,50 @@ const Crossword = (props: CrosswordProps) => {
       })
     );
 
-    gridData.forEach((rowData, row) => {
-      rowData.forEach((cellData, col) => {
+    props.gridDataState.gridData.forEach((rowData, row) => {
 
-        const guess: Guess = props.guesses[row][col];
+      rowData.forEach((gridDataElement, col) => {
 
-        cellData.guess = guess.value;
+        let guess: Guess;
+        if (props.guesses.length > 0 && row < rowData.length) {
+          guess = props.guesses[row][col];
+        } else {
+          guess = {
+            value: '',
+            guessIsRemote: false,
+            remoteUser: null
+          };
+        }
+        // const guess: Guess = props.guesses[row][col];
 
-        if (!cellData.used) {
+        const renderableCell: RenderableCell = {
+          used: gridDataElement.used,
+          number: gridDataElement.number,
+          answer: gridDataElement.answer,
+          locked: gridDataElement.locked,
+          row: gridDataElement.row,
+          col: gridDataElement.col,
+          across: gridDataElement.across,
+          down: gridDataElement.down,
+          guess: guess.value,
+        };
+
+        if (!renderableCell.used) {
           return;
         }
         cells.push(
           <Cell
             // eslint-disable-next-line react/no-array-index-key
             key={`R${row}C${col}`}
-            row={cellData.row}
-            col={cellData.col}
-            guess={cellData.guess}
-            number={cellData.number}
+            row={renderableCell.row}
+            col={renderableCell.col}
+            guess={renderableCell.guess}
+            number={renderableCell.number}
             focus={focused && row === focusedRow && col === focusedCol}
             highlight={
               focused &&
               currentNumber &&
-              cellData[currentDirection] === currentNumber
+              renderableCell[currentDirection] === currentNumber
             }
             onClick={handleCellClick}
           />
