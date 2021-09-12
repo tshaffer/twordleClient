@@ -29,20 +29,13 @@ const Home = (props: HomeProps) => {
     props.onLoadPuzzle(puzzleMetadata.id);
   };
 
-  // const handleCellChange = (row: number, col: number, char: string) => {
-  //   console.log('Home#handleCellChange: ', row, col, char);
-  // };
-
   const handleUpdateGuess = (row: number, col: number, char: string) => {
-    console.log('Home#handleUpdateGuess: ', row, col, char);
     props.onUpdateGuess(row, col, {
       guess: char,
       guessIsRemote: false,
       remoteUser: null,
     });
   };
-
-  //         onCellChange={handleCellChange}
 
   return (
     <div>

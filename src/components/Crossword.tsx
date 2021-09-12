@@ -30,11 +30,8 @@ const defaultTheme = {
   highlightBackground: 'rgb(255,255,204)',
 };
 
-
 export interface CrosswordPropsFromParent {
-  // onCellChange: (row: number, col: number, char: string) => any;
   onUpdateGuess: (row: number, col: number, char: string) => any;
-  // onGuessChange: (row: number, col: number, )
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
@@ -53,9 +50,6 @@ const Crossword = (props: CrosswordProps) => {
   const [focusedCol, setFocusedCol] = useState(0);
   const [currentDirection, setCurrentDirection] = useState('across');
   const [currentNumber, setCurrentNumber] = useState('1');
-  const [bulkChange, setBulkChange] = useState(null);
-  const [checkQueue, setCheckQueue] = useState([]);
-  const [crosswordCorrect, setCrosswordCorrect] = useState(false);
 
   React.useEffect(() => {
 
@@ -81,23 +75,7 @@ const Crossword = (props: CrosswordProps) => {
     setCurrentDirection('across');
     setCurrentNumber('1');
 
-    // refreshCompletedAnswers(gridData);
-
-    setBulkChange(null);
-
-    // trigger any "loaded correct" guesses...
-    // if (loadedCorrect && loadedCorrect.length > 0 && onLoadedCorrect) {
-    //   onLoadedCorrect(loadedCorrect);
-    // }
-
   }, [props.activePuzzle, props.gridDataState]);
-
-  React.useEffect(() => {
-
-    console.log('useEffect on props.guesses change');
-    console.log(props.guesses);
-
-  }, [props.guesses]);
 
   const inputRef = React.useRef();
 
@@ -111,37 +89,6 @@ const Crossword = (props: CrosswordProps) => {
     // fake cellData to represent "out of bounds"
     return { row, col, used: false, outOfBounds: true };
   };
-
-  // const setCellCharacter = (row, col, char) => {
-
-  //   const cell = getCellData(row, col);
-
-  //   if (!cell.used) {
-  //     return;
-  //   }
-
-  //   // If the character is already the cell's guess, there's nothing to do.
-  //   if (cell.guess === char) {
-  //     return;
-  //   }
-
-  //   // update the gridData with the guess
-  //   const tsGridData = cloneDeep(gridData);
-  //   tsGridData[row][col].guess = char;
-  //   tsGridData[row][col].guessIsRemote = false;
-  //   setGridData(tsGridData);
-
-  //   // push the row/col for checking!
-  //   // setCheckQueue(
-  //   //   produce((draft) => {
-  //   //     draft.push({ row, col });
-  //   //   })
-  //   // );
-
-  //   props.onCellChange(row, col, char);
-
-  //   // refreshCompletedAnswers(tsGridData);
-  // };
 
   const handleCellClick = (cellData) => {
     const { row, col } = cellData;
@@ -169,10 +116,6 @@ const Crossword = (props: CrosswordProps) => {
     }
 
     setCurrentNumber(cellData[direction]);
-
-    // if (onFocusedCellChange) {
-    //   onFocusedCellChange(row, col, direction);
-    // }
 
     focus();
   };
@@ -206,9 +149,6 @@ const Crossword = (props: CrosswordProps) => {
       direction = otherDirection(direction);
     }
 
-    // if (onFocusedCellChange) {
-    //   onFocusedCellChange(row, col, direction);
-    // }
     setFocusedRow(row);
     setFocusedCol(col);
     setCurrentDirection(direction);
@@ -243,13 +183,6 @@ const Crossword = (props: CrosswordProps) => {
     moveRelative(across ? 0 : -1, across ? -1 : 0);
   };
 
-  const handleSingleCharacter = (char) => {
-    props.onUpdateGuess(focusedRow, focusedCol, char.toUpperCase());
-    // setCellCharacter(focusedRow, focusedCol, char.toUpperCase());
-    moveForward();
-  };
-
-
   // We use the keydown event for control/arrow keys, but not for textual
   // input, because it's hard to suss out when a key is "regular" or not.
   const handleInputKeyDown = (event) => {
@@ -261,7 +194,6 @@ const Crossword = (props: CrosswordProps) => {
 
     let preventDefault = true;
     const { key } = event;
-    // console.log('CROSSWORD KEYDOWN', event.key);
 
     // FUTURE: should we "jump" over black space?  That might help some for
     // keyboard users.
@@ -297,7 +229,6 @@ const Crossword = (props: CrosswordProps) => {
       // Delete:    delete the current cell, but don't move
       case 'Backspace':
       case 'Delete': {
-        // setCellCharacter(focusedRow, focusedCol, '');
         props.onUpdateGuess(focusedRow, focusedCol, '');
         if (key === 'Backspace') {
           moveBackward();
@@ -336,7 +267,9 @@ const Crossword = (props: CrosswordProps) => {
           break;
         }
 
-        handleSingleCharacter(key);
+        props.onUpdateGuess(focusedRow, focusedCol, key.toUpperCase());
+        moveForward();
+
         break;
     }
 
@@ -345,12 +278,7 @@ const Crossword = (props: CrosswordProps) => {
     }
   };
 
-  const handleInputChange = (event) => {
-    event.preventDefault();
-    setBulkChange(event.target.value);
-  };
-
-  const handleInputClick = (event) => {
+  const handleInputClick = () => {
 
     // *don't* event.preventDefault(), because we want the input to actually
     // take focus
@@ -459,7 +387,6 @@ const Crossword = (props: CrosswordProps) => {
                   type="text"
                   onClick={handleInputClick}
                   onKeyDown={handleInputKeyDown}
-                  onChange={handleInputChange}
                   value=""
                   // onInput={this.handleInput}
                   autoComplete="off"
