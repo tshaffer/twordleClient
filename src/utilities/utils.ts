@@ -1,6 +1,18 @@
 import { cloneDeep } from 'lodash';
-import { CellGuess, DisplayedPuzzle, Guesses, GuessesInRow } from '../types';
+import {
+  CellGuess,
+  DisplayedPuzzle,
+  GridDataElement,
+  GridDataElementsInRow,
+  GridDataType,
+  Guesses,
+  GuessesInRow,
+  GridDataState,
+  Clues,
+  DisplayedPuzzleCell
+} from '../types';
 
+// TEDTODO types
 const directionInfo = {
   across: {
     primary: 'col',
@@ -12,23 +24,24 @@ const directionInfo = {
   },
 };
 
-export const bothDirections = Object.keys(directionInfo);
+export const bothDirections: string[] = Object.keys(directionInfo);
 
-export function isAcross(direction) {
+export function isAcross(direction): boolean {
   return direction === 'across';
 }
 
-export function otherDirection(direction) {
+export function otherDirection(direction): string {
   return isAcross(direction) ? 'down' : 'across';
 }
 
-export function calculateExtents(data, direction) {
+// TEDTODO - types for return value
+export function calculateExtents(data: DisplayedPuzzle, direction: string) {
   const dir = directionInfo[direction];
   let primaryMax = 0;
   let orthogonalMax = 0;
 
   Object.entries(data[direction]).forEach(([i, info]) => {
-    const primary = info[dir.primary] + (info as any).answer.length - 1;
+    const primary = info[dir.primary] + (info as DisplayedPuzzleCell).answer.length - 1;
     if (primary > primaryMax) {
       primaryMax = primary;
     }
@@ -45,26 +58,23 @@ export function calculateExtents(data, direction) {
   };
 }
 
-const emptyCellData = {
+const emptyCellData: GridDataElement = {
   used: false,
   number: null,
   answer: '',
-  guess: '',
-  guessIsRemote: false,
   locked: false,
-  // row: r,
-  // col: c,
   across: null,
   down: null,
-  inFullAnswer: false,
+  row: null,
+  col: null,
 };
 
-export function createEmptyGrid(size) {
-  const gridData = Array(size);
+export function createEmptyGrid(size): GridDataType {
+  const gridData = Array(size) as GridDataType;
   // Rather than [x][y] in column-major order, the cells are indexed as
   // [row][col] in row-major order.
   for (let r = 0; r < size; r++) {
-    gridData[r] = Array(size);
+    gridData[r] = Array(size) as GridDataElementsInRow;
     for (let c = 0; c < size; c++) {
       gridData[r][c] = {
         ...emptyCellData,
@@ -84,15 +94,17 @@ function byNumber(a, b) {
   return aNum - bNum;
 }
 
-function fillClues(gridData, clues, data, direction) {
+function fillClues(gridData: GridDataType, clues: Clues, data: DisplayedPuzzle, direction: string): void {
+
+  // TEDTODO type
   const dir = directionInfo[direction];
 
   Object.entries(data[direction]).forEach(([number, info]) => {
-    const { row: rowStart, col: colStart, clue, answer } = info as any;
+    const { row: rowStart, col: colStart, clue, answer } = info as DisplayedPuzzleCell;
     for (let i = 0; i < answer.length; i++) {
       const row = rowStart + (dir.primary === 'row' ? i : 0);
       const col = colStart + (dir.primary === 'col' ? i : 0);
-      const cellData = gridData[row][col];
+      const cellData: GridDataElement = gridData[row][col];
 
       // TODO?: check to ensure the answer is the same if it's already set?
       cellData.used = true;
@@ -111,18 +123,19 @@ function fillClues(gridData, clues, data, direction) {
   clues[direction].sort(byNumber);
 }
 
-export const createGridData = (data: DisplayedPuzzle) => {
+export const createGridData = (data: DisplayedPuzzle): GridDataState => {
 
+  // TEDTODO type
   const acrossMax = calculateExtents(data, 'across');
   const downMax = calculateExtents(data, 'down');
 
-  const size =
+  const size: number =
     Math.max(...Object.values(acrossMax), ...Object.values(downMax)) + 1;
 
-  const gridData = createEmptyGrid(size);
+  const gridData: GridDataType = createEmptyGrid(size);
 
   // Now fill with answers... and also collect the clues
-  const clues = {
+  const clues: Clues = {
     across: [],
     down: [],
   };
@@ -130,15 +143,21 @@ export const createGridData = (data: DisplayedPuzzle) => {
   fillClues(gridData, clues, data, 'across');
   fillClues(gridData, clues, data, 'down');
 
-  return { size, gridData, clues };
+  const gridDataState: GridDataState = {
+    size,
+    gridData,
+    clues
+  };
+  return gridDataState;
 };
 
 export const createEmptyGuessesGrid = (displayedPuzzle: DisplayedPuzzle): Guesses => {
 
+  // TEDTODO - type
   const rowCount = calculateExtents(displayedPuzzle, 'across');
   const colCount = calculateExtents(displayedPuzzle, 'down');
 
-  const size =
+  const size: number =
     Math.max(...Object.values(rowCount), ...Object.values(colCount)) + 1;
 
   const emptyCellGuess: CellGuess = {

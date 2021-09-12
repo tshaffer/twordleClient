@@ -112,44 +112,39 @@ export interface Player {
   poo: string;
 }
 
-export interface Game {  
-  id: string;
-  puzzleId: string;
-  players: Player[];
-  startDateTime: Date;
-  lastPlayedDateTime: Date;
-  elapsedTime: number;
-  solved: boolean;
-}
+// export interface Game {  
+//   id: string;
+//   puzzleId: string;
+//   players: Player[];
+//   startDateTime: Date;
+//   lastPlayedDateTime: Date;
+//   elapsedTime: number;
+//   solved: boolean;
+// }
 
-export interface CellSpec {
+// export interface GridData {
+//   size: number;
+//   cellSpecs: any[]; // two dimensional grid of cells
+//   gridData: any;
+//   clues: any;
+// }
+
+export interface GridDataElement {
   used: boolean;
-  number: null,
-  answer: '',
-  guess: '',
-  guessIsRemote: false,
-  locked: false,
-  // row: r,
-  // col: c,
-  across: null,
-  down: null,
-  inFullAnswer: false,
+  number: string;
+  answer: string;
+  locked: boolean;
+  row: number | null;
+  col: number | null;
+  across: boolean;
+  down: boolean;
 }
-
-export interface GridData {
-  size: number;
-  cellSpecs: any[]; // two dimensional grid of cells
-  gridData: any;
-  clues: any;
-}
-
-
-
-
+export type GridDataElementsInRow = GridDataElement[];
+export type GridDataType = GridDataElementsInRow[];
 
 export interface GridDataState {
   size: number;
-  gridData: any[];
+  gridData: GridDataType;
   clues: Clues;
 }
 

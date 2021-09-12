@@ -278,6 +278,10 @@ const Crossword = (props: CrosswordProps) => {
     }
   };
 
+  const handleInputChange = () => {
+    console.log('handleChange invoked');
+  };
+
   const handleInputClick = () => {
 
     // *don't* event.preventDefault(), because we want the input to actually
@@ -385,6 +389,7 @@ const Crossword = (props: CrosswordProps) => {
                 <input
                   aria-label="crossword-input"
                   type="text"
+                  onChange={handleInputChange}
                   onClick={handleInputClick}
                   onKeyDown={handleInputKeyDown}
                   value=""
