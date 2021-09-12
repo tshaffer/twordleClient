@@ -42,9 +42,6 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
 
 const Crossword = (props: CrosswordProps) => {
 
-  const [size, setSize] = useState(null);
-  const [gridData, setGridData] = useState(null);
-  const [clues, setClues] = useState(null);
   const [focused, setFocused] = useState(false);
   const [focusedRow, setFocusedRow] = useState(0);
   const [focusedCol, setFocusedCol] = useState(0);
@@ -52,24 +49,6 @@ const Crossword = (props: CrosswordProps) => {
   const [currentNumber, setCurrentNumber] = useState('1');
 
   React.useEffect(() => {
-
-    // eslint-disable-next-line no-shadow
-    // const { size, gridData, clues } = createGridData(props.activePuzzle);
-    const { size, gridData, clues } = props.gridDataState;
-
-    // let loadedCorrect;
-
-    setSize(size);
-    setGridData(gridData);
-    setClues(clues);
-
-    // Should we start with 1-across highlighted/focused?
-
-    // TODO: track input-field focus so we don't draw highlight when we're not
-    // really focused, *and* use first actual clue (whether across or down?)
-    // if (onFocusedCellChange) {
-    //   onFocusedCellChange(0, 0, 'across');
-    // }
     setFocusedRow(0);
     setFocusedCol(0);
     setCurrentDirection('across');
@@ -82,8 +61,8 @@ const Crossword = (props: CrosswordProps) => {
   const contextTheme = useContext(ThemeContext);
 
   const getCellData = (row, col) => {
-    if (row >= 0 && row < size && col >= 0 && col < size) {
-      return gridData[row][col];
+    if (row >= 0 && row < props.gridDataState.size && col >= 0 && col < props.gridDataState.size) {
+      return props.gridDataState.gridData[row][col];
     }
 
     // fake cellData to represent "out of bounds"
@@ -312,11 +291,11 @@ const Crossword = (props: CrosswordProps) => {
     focus();
   };
 
-  if (size === 0) {
+  if (props.gridDataState.size === 0) {
     return null;
   }
 
-  const cellSize = 100 / size;
+  const cellSize = 100 / props.gridDataState.size;
   const cellPadding = 0.125;
   const cellInner = cellSize - cellPadding * 2;
   const cellHalf = cellSize / 2;
@@ -332,10 +311,10 @@ const Crossword = (props: CrosswordProps) => {
   const finalTheme = { ...defaultTheme, ...contextTheme };
 
   const cells = [];
-  if (gridData) {
+  if (props.gridDataState.gridData) {
 
     bothDirections.every((direction) =>
-      clues[direction].every((clueInfo) => {
+      props.gridDataState.clues[direction].every((clueInfo) => {
         return clueInfo.correct;
       })
     );
@@ -448,12 +427,12 @@ const Crossword = (props: CrosswordProps) => {
               </div>
             </div >
             <div style={{ padding: '0 1em', flex: '1 2 25%' }}>
-              {clues &&
+              {props.gridDataState.clues &&
                 bothDirections.map((direction) => (
                   <DirectionClues
                     key={direction}
                     direction={direction}
-                    clues={clues[direction]}
+                    clues={props.gridDataState.clues[direction]}
                   />
                 ))}
 
