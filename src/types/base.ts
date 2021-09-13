@@ -4,7 +4,7 @@ export const serverUrl = 'http://localhost:8000';
 export const apiUrlFragment = '/api/v1/';
 
 export interface TedCrossState {
-  activePuzzleState: ActiveCrosswordState | null;
+  derivedCrosswordData: DerivedCrosswordData | null;
   guessesState: GuessesState;
   appState: AppState;
   puzzlesState: PuzzlesState,
@@ -71,12 +71,17 @@ export interface ParsedClue {
   text: string;
 }
 
+export interface DerivedCrosswordData {
+  size: number;
+  gridData: GridSpec;
+  crosswordClues: CluesByDirection | null;
+  clues: Clues;
+}
 
 // TEDTODO - rename ActiveCrosswordState
-export interface ActiveCrosswordState {
-  crosswordClues: CluesByDirection | null;
-  gridDataState: GridDataState | null;
-}
+// export interface ActiveCrosswordState {
+//   gridDataState: GridDataState | null;
+// }
 
 export interface ClueAtLocation {
   clue: string;
@@ -96,11 +101,11 @@ export interface CluesByDirection {
 
 
 // TEDTODO - investigate rejiggering of GridDataState. Remove it and make size, gridData, and clues siblings of some other properties.
-export interface GridDataState {
-  size: number;
-  gridData: GridSpec;
-  clues: Clues;
-}
+// export interface GridDataState {
+//   size: number;
+//   gridData: GridSpec;
+//   clues: Clues;
+// }
 
 // TEDTODO - do I need separate ClueAtLocation and Clue?
 export interface ClueAtLocation {

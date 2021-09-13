@@ -4,19 +4,19 @@ import { useState, useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Guess, CluesByDirection, GridDataState, GuessesGrid, GridSquare, GridSquareSpec } from '../types';
+import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec, Clues } from '../types';
 
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
 import Cell from './Cell';
 import DirectionClues from './DirectionClues';
 
-import { getActivePuzzle, getGuesses } from '../selectors';
+import { getCrosswordClues, getGuesses } from '../selectors';
 import { bothDirections, isAcross, otherDirection } from '../utilities';
 import { isNil } from 'lodash';
 
 import { CrosswordContext, CrosswordSizeContext } from './context';
-import { getGridDataState } from '../selectors';
+import { getSize, getGridData, getClues } from '../selectors';
 
 const defaultTheme = {
   columnBreakpoint: '768px',
@@ -36,7 +36,9 @@ export interface CrosswordPropsFromParent {
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
   activePuzzle: CluesByDirection;
-  gridDataState: GridDataState;
+  size: number;
+  gridData: GridSpec;
+  clues: Clues;
   guesses: GuessesGrid;
 }
 
@@ -54,15 +56,15 @@ const Crossword = (props: CrosswordProps) => {
     setCurrentDirection('across');
     setCurrentNumber('1');
 
-  }, [props.activePuzzle, props.gridDataState]);
+  }, [props.activePuzzle, props.size, props.gridData, props.clues]);
 
   const inputRef = React.useRef();
 
   const contextTheme = useContext(ThemeContext);
 
   const getCellData = (row, col) => {
-    if (row >= 0 && row < props.gridDataState.size && col >= 0 && col < props.gridDataState.size) {
-      return props.gridDataState.gridData[row][col];
+    if (row >= 0 && row < props.size && col >= 0 && col < props.size) {
+      return props.gridData[row][col];
     }
 
     // fake cellData to represent "out of bounds"
@@ -291,11 +293,11 @@ const Crossword = (props: CrosswordProps) => {
     focus();
   };
 
-  if (props.gridDataState.size === 0) {
+  if (props.size === 0) {
     return null;
   }
 
-  const cellSize = 100 / props.gridDataState.size;
+  const cellSize = 100 / props.size;
   const cellPadding = 0.125;
   const cellInner = cellSize - cellPadding * 2;
   const cellHalf = cellSize / 2;
@@ -311,20 +313,20 @@ const Crossword = (props: CrosswordProps) => {
   const finalTheme = { ...defaultTheme, ...contextTheme };
 
   const cells = [];
-  if (props.gridDataState.gridData) {
+  if (props.gridData) {
 
     bothDirections.every((direction) =>
-      props.gridDataState.clues[direction].every((clueInfo) => {
+      props.clues[direction].every((clueInfo) => {
         return clueInfo.correct;
       })
     );
 
-    props.gridDataState.gridData.forEach((rowData, row) => {
+    props.gridData.forEach((rowData, row) => {
 
       rowData.forEach((gridSquareSpec: GridSquareSpec, col: number) => {
 
         let guess: Guess;
-        if (props.guesses.length > 0 && row < rowData.length) {
+        if (!isNil(props.guesses) && props.guesses.length > 0 && row < rowData.length) {
           guess = props.guesses[row][col];
         } else {
           guess = {
@@ -426,12 +428,12 @@ const Crossword = (props: CrosswordProps) => {
               </div>
             </div >
             <div style={{ padding: '0 1em', flex: '1 2 25%' }}>
-              {props.gridDataState.clues &&
+              {props.clues &&
                 bothDirections.map((direction) => (
                   <DirectionClues
                     key={direction}
                     direction={direction}
-                    clues={props.gridDataState.clues[direction]}
+                    clues={props.clues[direction]}
                   />
                 ))}
 
@@ -445,9 +447,11 @@ const Crossword = (props: CrosswordProps) => {
 
 function mapStateToProps(state: any) {
   return {
-    activePuzzle: getActivePuzzle(state),
-    gridDataState: getGridDataState(state),
+    activePuzzle: getCrosswordClues(state),
     guesses: getGuesses(state),
+    size: getSize(state),
+    gridData: getGridData(state),
+    clues: getClues(state),
   };
 }
 

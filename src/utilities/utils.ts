@@ -7,7 +7,6 @@ import {
   GridSpec,
   GuessesGrid,
   RowOfGuesses,
-  GridDataState,
   Clues,
   ClueAtLocation
 } from '../types';
@@ -123,7 +122,7 @@ function fillClues(gridData: GridSpec, clues: Clues, data: CluesByDirection, dir
   clues[direction].sort(byNumber);
 }
 
-export const createGridData = (data: CluesByDirection): GridDataState => {
+export const createGridData = (data: CluesByDirection): any => {
 
   // TEDTODO type
   const acrossMax = calculateExtents(data, 'across');
@@ -143,12 +142,11 @@ export const createGridData = (data: CluesByDirection): GridDataState => {
   fillClues(gridData, clues, data, 'across');
   fillClues(gridData, clues, data, 'down');
 
-  const gridDataState: GridDataState = {
+  return {
     size,
     gridData,
     clues
   };
-  return gridDataState;
 };
 
 export const createEmptyGuessesGrid = (displayedPuzzle: CluesByDirection): GuessesGrid => {
