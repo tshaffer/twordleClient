@@ -4,7 +4,7 @@ import { addPuzzle, addPuzzleMetadata, setGridData, setPuzzleId } from '../model
 
 import { apiUrlFragment, serverUrl } from '../index';
 import { initializeGuesses } from '../models';
-import { setActivePuzzle } from '../models';
+import { setCrosswordClues } from '../models';
 import { createEmptyGuessesGrid, createGridData } from '../utilities';
 import { setClues, setSize } from '../models';
 
@@ -39,7 +39,7 @@ export const loadPuzzle = (id: string) => {
 
         // not the correct way to do this, in my opinion. it should be done when the user chooses
         // to play the game
-        dispatch(setActivePuzzle(derivedCrosswordData.crosswordClues));
+        dispatch(setCrosswordClues(derivedCrosswordData.crosswordClues));
         dispatch(setSize(derivedCrosswordData.size));
         dispatch(setGridData(derivedCrosswordData.gridData));
         dispatch(setClues(derivedCrosswordData.clues));

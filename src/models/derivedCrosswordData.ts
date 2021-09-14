@@ -14,21 +14,6 @@ export const SET_ACTIVE_PUZZLE = 'SET_ACTIVE_PUZZLE';
 // Actions
 // ------------------------------------
 
-export interface SetActivePuzzleStatePayload {
-  activePuzzle: CluesByDirection | null;
-}
-
-export const setActivePuzzle = (
-  activePuzzle: CluesByDirection | null,
-): any => {
-  return {
-    type: SET_ACTIVE_PUZZLE,
-    payload: {
-      activePuzzle,
-    },
-  };
-};
-
 export interface SetSizePayload {
   size: number;
 }
@@ -104,7 +89,7 @@ const initialState: DerivedCrosswordData = {
 
 export const derivedCrosswordDataReducer = (
   state: DerivedCrosswordData = initialState,
-  action: TedModelBaseAction<SetSizePayload & SetActivePuzzleStatePayload & SetGridDataPayload & SetCrosswordCluesPayload & SetCluesPayload>
+  action: TedModelBaseAction<SetSizePayload & SetGridDataPayload & SetCrosswordCluesPayload & SetCluesPayload>
 ): DerivedCrosswordData => {
   switch (action.type) {
     case SET_SIZE: {
@@ -118,9 +103,6 @@ export const derivedCrosswordDataReducer = (
     }
     case SET_CLUES: {
       return { ...state, clues: action.payload.clues };
-    }
-    case SET_ACTIVE_PUZZLE: {
-      return { ...state, crosswordClues: action.payload.activePuzzle };
     }
     default:
       return state;

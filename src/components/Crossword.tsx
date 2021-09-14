@@ -35,7 +35,7 @@ export interface CrosswordPropsFromParent {
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
-  activePuzzle: CluesByDirection;
+  cluesByDirection: CluesByDirection;
   size: number;
   gridData: GridSpec;
   clues: Clues;
@@ -56,7 +56,7 @@ const Crossword = (props: CrosswordProps) => {
     setCurrentDirection('across');
     setCurrentNumber('1');
 
-  }, [props.activePuzzle, props.size, props.gridData, props.clues]);
+  }, [props.cluesByDirection, props.size, props.gridData, props.clues]);
 
   const inputRef = React.useRef();
 
@@ -221,7 +221,7 @@ const Crossword = (props: CrosswordProps) => {
       case 'End': {
 
         // move to beginning/end of this entry?
-        const info = props.activePuzzle[currentDirection][currentNumber];
+        const info = props.cluesByDirection[currentDirection][currentNumber];
         const {
           answer: { length },
         } = info;
@@ -287,7 +287,7 @@ const Crossword = (props: CrosswordProps) => {
   };
 
   const handleClueSelected = (direction, number) => {
-    const info = props.activePuzzle[direction][number];
+    const info = props.cluesByDirection[direction][number];
     // TODO: sanity-check info?
     moveTo(info.row, info.col, direction);
     focus();
@@ -447,7 +447,7 @@ const Crossword = (props: CrosswordProps) => {
 
 function mapStateToProps(state: any) {
   return {
-    activePuzzle: getCrosswordClues(state),
+    cluesByDirection: getCrosswordClues(state),
     guesses: getGuesses(state),
     size: getSize(state),
     gridData: getGridData(state),
