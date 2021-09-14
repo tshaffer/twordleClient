@@ -3,7 +3,7 @@ import { CluesByDirection, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec,
 import { addPuzzle, addPuzzleMetadata, setGridData, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
-import { addDisplayedPuzzle, initializeGuesses } from '../models';
+import { initializeGuesses } from '../models';
 import { setActivePuzzle } from '../models';
 import { createEmptyGuessesGrid, createGridData } from '../utilities';
 import { setClues, setSize } from '../models';
@@ -36,22 +36,10 @@ export const loadPuzzle = (id: string) => {
         dispatch(addPuzzle(id, puzzleEntity));
 
         const derivedCrosswordData: DerivedCrosswordData = generateDerivedCrosswordData(puzzleEntity);
-        dispatch(addDisplayedPuzzle(id, derivedCrosswordData.crosswordClues));
-
-        // const displayedPuzzle: CluesByDirection = buildDisplayedPuzzle(puzzleEntity);
-        // dispatch(addDisplayedPuzzle(id,displayedPuzzle));
 
         // not the correct way to do this, in my opinion. it should be done when the user chooses
         // to play the game
         dispatch(setActivePuzzle(derivedCrosswordData.crosswordClues));
-
-        // const { size, gridData, clues } = createGridData(displayedPuzzle);
-        // const gridDataState: GridDataState = {
-        //   size,
-        //   gridData,
-        //   clues
-        // };
-        // dispatch(setGridDataState(gridDataState));
         dispatch(setSize(derivedCrosswordData.size));
         dispatch(setGridData(derivedCrosswordData.gridData));
         dispatch(setClues(derivedCrosswordData.clues));
@@ -65,15 +53,13 @@ export const loadPuzzle = (id: string) => {
 export const generateDerivedCrosswordData = (puzzleEntity: PuzzleEntity): DerivedCrosswordData => {
   const crosswordClues: CluesByDirection = buildDisplayedPuzzle(puzzleEntity);
   const { size, gridData, clues } = createGridData(crosswordClues);
-
   return {
     size,
     gridData,
     crosswordClues,
     clues, 
-  }
-
-}
+  };
+};
 
 export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirection => {
   

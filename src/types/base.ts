@@ -29,15 +29,9 @@ export interface PuzzlesMap {
   [id: string]: PuzzleEntity; // puzzle id
 }
 
-// TEDTODO - usage of DisplayedPuzzlesMap and is it correct?
-export interface DisplayedPuzzlesMap {
-  [id: string]: CluesByDirection; // puzzle id
-}
-
 export interface PuzzlesState {
   puzzlesMetadata: PuzzlesMetadataMap,
   puzzles: PuzzlesMap;
-  displayedPuzzles: DisplayedPuzzlesMap;
 }
 
 // Parsed from the .puz file by confuzzle

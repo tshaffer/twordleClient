@@ -49,24 +49,6 @@ export const addPuzzle = (
   };
 };
 
-export interface AddDisplayedPuzzlePayload {
-  id: string;
-  displayedPuzzle: CluesByDirection;
-}
-
-export const addDisplayedPuzzle = (
-  id: string,
-  displayedPuzzle: CluesByDirection
-): any => {
-  return {
-    type: ADD_DISPLAYED_PUZZLE,
-    payload: {
-      id,
-      displayedPuzzle,
-    }
-  };
-};
-
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -75,12 +57,11 @@ const initialState: PuzzlesState =
 {
   puzzlesMetadata: {},
   puzzles: {},
-  displayedPuzzles: {},
 };
 
 export const puzzlesStateReducer = (
   state: PuzzlesState = initialState,
-  action: TedModelBaseAction<AddPuzzleMetadataPayload & AddPuzzlePayload & AddDisplayedPuzzlePayload>
+  action: TedModelBaseAction<AddPuzzleMetadataPayload & AddPuzzlePayload>
 ): PuzzlesState => {
   switch (action.type) {
     case ADD_PUZZLE_METADATA: {
@@ -91,11 +72,6 @@ export const puzzlesStateReducer = (
     case ADD_PUZZLE: {
       const newState = cloneDeep(state) as PuzzlesState;
       newState.puzzles[action.payload.id] = action.payload.puzzle;
-      return newState;
-    }
-    case ADD_DISPLAYED_PUZZLE: {
-      const newState = cloneDeep(state) as PuzzlesState;
-      newState.displayedPuzzles[action.payload.id] = action.payload.displayedPuzzle;
       return newState;
     }
     default:
