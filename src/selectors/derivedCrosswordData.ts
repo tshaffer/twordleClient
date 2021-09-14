@@ -9,7 +9,7 @@ export const getGridData = (state: TedCrossState): GridSpec => {
 };
 
 export const getCrosswordClues = (state: TedCrossState): CluesByDirection | null => {
-  return state.derivedCrosswordData.crosswordClues;
+  return state.derivedCrosswordData.cluesByDirection;
 };
 
 export const getClues = (state: TedCrossState): Clues => {

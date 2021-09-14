@@ -39,12 +39,12 @@ export const loadPuzzle = (id: string) => {
 
         // not the correct way to do this, in my opinion. it should be done when the user chooses
         // to play the game
-        dispatch(setCrosswordClues(derivedCrosswordData.crosswordClues));
+        dispatch(setCrosswordClues(derivedCrosswordData.cluesByDirection));
         dispatch(setSize(derivedCrosswordData.size));
         dispatch(setGridData(derivedCrosswordData.gridData));
         dispatch(setClues(derivedCrosswordData.clues));
         
-        const guesses = createEmptyGuessesGrid(derivedCrosswordData.crosswordClues);
+        const guesses = createEmptyGuessesGrid(derivedCrosswordData.cluesByDirection);
         dispatch(initializeGuesses(guesses));
       });
   });
@@ -56,14 +56,14 @@ export const generateDerivedCrosswordData = (puzzleEntity: PuzzleEntity): Derive
   return {
     size,
     gridData,
-    crosswordClues,
+    cluesByDirection: crosswordClues,
     clues, 
   };
 };
 
 export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirection => {
   
-  const displayedPuzzle: CluesByDirection = {
+  const cluesByDirection: CluesByDirection = {
     across: {},
     down: {},
   };
@@ -72,14 +72,14 @@ export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirecti
   for (const parsedClue of parsedClues) {
     const { col, isAcross, row, solution, text } = parsedClue;
     if (isAcross) {
-      displayedPuzzle.across[parsedClue.number] = {
+      cluesByDirection.across[parsedClue.number] = {
         clue: text,
         answer: solution,
         row,
         col,
       };
     } else {
-      displayedPuzzle.down[parsedClue.number] = {
+      cluesByDirection.down[parsedClue.number] = {
         clue: text,
         answer: solution,
         row,
@@ -88,5 +88,5 @@ export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirecti
     }
   }
   
-  return displayedPuzzle;
+  return cluesByDirection;
 };

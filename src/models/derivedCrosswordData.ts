@@ -56,8 +56,8 @@ export const setCrosswordClues = (
     payload: {
       crosswordClues,
     }
-  }
-}
+  };
+};
 
 export interface SetCluesPayload {
   clues: Clues | null;
@@ -71,8 +71,8 @@ export const setClues = (
     payload: {
       clues,
     }
-  }
-}
+  };
+};
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -80,7 +80,7 @@ export const setClues = (
 const initialState: DerivedCrosswordData = {
   size: 0,
   gridData: [],
-  crosswordClues: null,
+  cluesByDirection: null,
   clues: {
     across: [],
     down: [],
@@ -99,7 +99,7 @@ export const derivedCrosswordDataReducer = (
       return { ...state, gridData: action.payload.gridData };
     }
     case SET_CROSSSWORD_CLUES: {
-      return { ...state, crosswordClues: action.payload.crosswordClues };
+      return { ...state, cluesByDirection: action.payload.crosswordClues };
     }
     case SET_CLUES: {
       return { ...state, clues: action.payload.clues };

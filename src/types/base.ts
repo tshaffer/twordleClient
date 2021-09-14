@@ -68,14 +68,9 @@ export interface ParsedClue {
 export interface DerivedCrosswordData {
   size: number;
   gridData: GridSpec;
-  crosswordClues: CluesByDirection | null;
+  cluesByDirection: CluesByDirection | null;
   clues: Clues;
 }
-
-// TEDTODO - rename ActiveCrosswordState
-// export interface ActiveCrosswordState {
-//   gridDataState: GridDataState | null;
-// }
 
 export interface ClueAtLocation {
   clue: string;
