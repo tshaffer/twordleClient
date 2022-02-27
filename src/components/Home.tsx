@@ -12,7 +12,7 @@ const Home = (props: HomeProps) => {
   }, []);
 
   return (
-    <div>Boilerplate home</div>
+    <div>twordle home</div>
   );
 };
 

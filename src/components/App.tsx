@@ -2,7 +2,9 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Home from './Home';
+// import Home from './Home';
+
+import Button from '@mui/material/Button';
 
 
 export interface AppProps {
@@ -18,9 +20,10 @@ const App = (props: AppProps) => {
     console.log('app init invoked');
   };
 
-  return (
-    <Home></Home>
-  )
+  return <Button variant="contained">Hello World</Button>;
+  // return (
+  //   <Home></Home>
+  // );
 };
 
 function mapStateToProps(state: any) {

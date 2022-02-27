@@ -52,8 +52,8 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
     new CopyWebpackPlugin([
-      { from: '../tedClientBoilerplate/build/bundle.js', to: '/Users/tedshaffer/Documents/Projects/tedServerBoilerplate/public/build' },
-      { from: '../tedClientBoilerplate/build/bundle.js.map', to: '/Users/tedshaffer/Documents/Projects/tedServerBoilerplate/public/build' },
+      { from: '../twordleClient/build/bundle.js', to: '/Users/tedshaffer/Documents/Projects/twordleServer/public/build' },
+      { from: '../twordleClient/build/bundle.js.map', to: '/Users/tedshaffer/Documents/Projects/twordleServer/public/build' },
     ]),
   ]
 };
