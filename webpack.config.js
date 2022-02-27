@@ -17,7 +17,7 @@ module.exports = {
   target: 'web',
 
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json']
+    extensions: ['.ts', '.tsx', '.js', '.json', '.css'],
   },
 
   module: {
@@ -29,6 +29,21 @@ module.exports = {
             loader: 'ts-loader'
           }
         ]
+      },
+      {
+        test: /\.(png|jp(e*)g|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'images/[hash]-[name].[ext]',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       }
     ]
   },
@@ -36,23 +51,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
     new CopyWebpackPlugin([
-      { from: '../client/build/bundle.js', to: '/Users/tedshaffer/Documents/Projects/tedword/public/build' },
-      { from: '../client/build/bundle.js.map', to: '/Users/tedshaffer/Documents/Projects/tedword/public/build' },
+      { from: '../tedClientBoilerplate/build/bundle.js', to: '/Users/tedshaffer/Documents/Projects/tedServerBoilerplate/public/build' },
+      { from: '../tedClientBoilerplate/build/bundle.js.map', to: '/Users/tedshaffer/Documents/Projects/tedServerBoilerplate/public/build' },
     ]),
   ]
 };
-//       { from: './build/bundle.js', to: '../../tedword/public/build' },
-// { from: '../client/build/bundle.js', to: '../../server/public/build' },
-// { from: '../client/build/bundle.js.map', to: '../../server/public/build' },
-// Users/tedshaffer/Documents/Projects/tedword/public/build
-
-/*
-{ from: '../client/build/bundle.js', to: '../../tedword/public/build' },
-{ from: '../client/build/bundle.js.map', to: '../../tedword/public/build' },
-*/
