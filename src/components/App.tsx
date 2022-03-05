@@ -21,6 +21,12 @@ const App = (props: AppProps) => {
     console.log('app init invoked');
   };
 
+  const handleWordNotAtIndex0Changed = (event: any) => {
+    console.log('new value');
+    console.log(event.target.value);
+  };
+
+
   return (
     <Box
       component="form"
@@ -68,6 +74,7 @@ const App = (props: AppProps) => {
         style={{ width: '74px' }}
         inputProps={{ maxLength: 5 }}
         variant="outlined"
+        onChange={handleWordNotAtIndex0Changed}
       />
       <TextField
         id="inWordNotAtIndex1"

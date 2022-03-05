@@ -7,6 +7,9 @@ export interface TedState {
   appState: AppState;
 }
 
+type StringArray = string[];
 export interface AppState {
-  userName: string;
+  charsAtExactLocation: string[],
+  charsNotAtExactLocation: any[][],
+  charsNotInWord: string[],
 }
