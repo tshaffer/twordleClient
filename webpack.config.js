@@ -18,6 +18,16 @@ module.exports = {
 
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.css'],
+    fallback: {
+      'fs': false,
+      'tls': false,
+      'net': false,
+      'path': false,
+      'zlib': false,
+      'http': false,
+      'https': false,
+      'stream': false,
+    }
   },
 
   module: {

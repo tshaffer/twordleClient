@@ -21,7 +21,8 @@
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.2.0"
   },
   "devDependencies": {
     "@svgr/webpack": "5.4.0",
