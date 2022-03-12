@@ -1,4 +1,4 @@
-import { setCharAtLocation, addCharacterNotAtLocation } from '../models';
+import { setCharAtLocation, setCharsNotAtLocation } from '../models';
 
 export const cnSetCharAtLocation = (
   index: number,
@@ -9,12 +9,12 @@ export const cnSetCharAtLocation = (
   };
 };
 
-export const cnAddCharacterNotAtLocation = (
+export const cnSetCharsNotAtLocation = (
   index: number,
-  charNotAtLocation: string,
+  charsNotAtLocation: string,
 ): any => {
   return (dispatch: any) => {
-    dispatch(addCharacterNotAtLocation(index, charNotAtLocation));
+    dispatch(setCharsNotAtLocation(index, charsNotAtLocation));
   };
 };
 

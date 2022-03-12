@@ -7,7 +7,7 @@ import { TedModelBaseAction } from './baseAction';
 // Constants
 // ------------------------------------
 const SET_CHAR_AT_LOCATION = 'SET_CHAR_AT_LOCATION';
-const ADD_CHAR_NOT_AT_LOCATION = 'ADD_CHAR_NOT_AT_LOCATION';
+const SET_CHARS_NOT_AT_LOCATION = 'ADD_CHAR_NOT_AT_LOCATION';
 
 // ------------------------------------
 // Actions
@@ -31,20 +31,20 @@ export const setCharAtLocation = (
   };
 };
 
-export interface AddCharacterNotAtLocation {
+export interface SetCharactersNotAtLocation {
   index: number;
-  charNotAtLocation: string;
+  charsNotAtLocation: string;
 }
 
-export const addCharacterNotAtLocation = (
+export const setCharsNotAtLocation = (
   index: number,
-  charNotAtLocation: string,
+  charsNotAtLocation: string,
 ): any => {
   return {
-    type: ADD_CHAR_NOT_AT_LOCATION,
+    type: SET_CHARS_NOT_AT_LOCATION,
     payload: {
       index,
-      charNotAtLocation,
+      charsNotAtLocation,
     },
   };
 };
@@ -61,18 +61,17 @@ const initialState: AppState = {
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedModelBaseAction<SetCharAtLocation & AddCharacterNotAtLocation>
+  action: TedModelBaseAction<SetCharAtLocation & SetCharactersNotAtLocation>
 ): AppState => {
   switch (action.type) {
     case SET_CHAR_AT_LOCATION: {
       const newState = cloneDeep(state);
-      newState.charsAtExactLocation[action.payload.index, action.payload.charAtLocation];
+      newState.charsAtExactLocation[action.payload.index] = action.payload.charAtLocation;
       return newState;
     }
-    case ADD_CHAR_NOT_AT_LOCATION: {
+    case SET_CHARS_NOT_AT_LOCATION: {
       const newState = cloneDeep(state);
-      const charsNotAtLocation: string[] = newState.charsNotAtExactLocation[action.payload.index];
-      charsNotAtLocation.push(action.payload.charNotAtLocation);
+      newState.charsNotAtExactLocation[action.payload.index] = action.payload.charsNotAtLocation;
       return newState;
     }
     default:
