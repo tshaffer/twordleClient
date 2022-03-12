@@ -1,6 +1,10 @@
+import axios from 'axios';
 import { TedState } from '../types';
 import { setLetterAtLocation, setLettersNotAtLocation, setLettersNotInWord } from '../models';
 import { getLettersAtExactLocation, getLettersNotAtExactLocation, getLettersNotInWord } from '../selectors';
+
+import { apiUrlFragment, serverUrl } from '../index';
+import { isNil } from 'lodash';
 
 export const cnSetLetterAtLocation = (
   index: number,
@@ -82,10 +86,12 @@ export const cnListWords = (): any => {
 
         // eliminate lettersNotAtExactLocation
         const lettersNotAtThisLocation: string = lettersNotAtExactLocation[i];
-        const arrayOfLettersNotAtThisLocation: string[] = lettersNotAtThisLocation.split('');
-        for (let j = 0; j < arrayOfLettersNotAtThisLocation.length; j++) {
-          const letterNotAtThisLocation: string = arrayOfLettersNotAtThisLocation[j];
-          candidateLettersAtThisLocation = candidateLettersAtThisLocation.filter(item => item !== letterNotAtThisLocation);
+        if (!isNil(lettersNotAtThisLocation)) {
+          const arrayOfLettersNotAtThisLocation: string[] = lettersNotAtThisLocation.split('');
+          for (let j = 0; j < arrayOfLettersNotAtThisLocation.length; j++) {
+            const letterNotAtThisLocation: string = arrayOfLettersNotAtThisLocation[j];
+            candidateLettersAtThisLocation = candidateLettersAtThisLocation.filter(item => item !== letterNotAtThisLocation);
+          }  
         }
         console.log(candidateLettersAtThisLocation);
 
@@ -95,5 +101,24 @@ export const cnListWords = (): any => {
 
     }
 
+    const path = serverUrl + apiUrlFragment + 'getWords';
+
+    const getWordsRequestBody: any = {
+      candidateLettersAtLocation,
+      lettersNotAtExactLocation,
+    };
+    return axios.post(
+      path,
+      getWordsRequestBody,
+    ).then((response) => {
+      console.log(response);
+      // dispatch(setFileUploadStatus('Upload successful'));
+      return;
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+      // dispatch(setFileUploadStatus('Upload failed: ' + error.toString()));
+      return;
+    });
   };
 };
