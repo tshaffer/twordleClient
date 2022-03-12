@@ -1,4 +1,4 @@
-import { setLetterAtLocation, setLettersNotAtLocation } from '../models';
+import { setLetterAtLocation, setLettersNotAtLocation, setLettersNotInWord } from '../models';
 
 export const cnSetLetterAtLocation = (
   index: number,
@@ -17,5 +17,14 @@ export const cnSetLettersNotAtLocation = (
     dispatch(setLettersNotAtLocation(index, lettersNotAtLocation));
   };
 };
+
+export const cnSetLettersNotInWord = (
+  lettersNotInWord: string,
+): any => {
+  return (dispatch: any) => {
+    dispatch(setLettersNotInWord(lettersNotInWord));
+  };
+};
+
 
 

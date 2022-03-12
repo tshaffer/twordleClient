@@ -7,11 +7,12 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-import { cnSetLetterAtLocation, cnSetLettersNotAtLocation } from '../controllers';
+import { cnSetLetterAtLocation, cnSetLettersNotAtLocation, cnSetLettersNotInWord } from '../controllers';
 
 export interface AppProps {
   onSetLetterAtLocation: (index: number, letterAtLocation: string,) => any;
   onSetLettersNotAtLocation: (index: number, lettersNotAtLocation: string) => any;
+  onSetLettersNotInWord: (lettersNotInWord: string) => any;
 }
 
 const App = (props: AppProps) => {
@@ -82,6 +83,13 @@ const App = (props: AppProps) => {
     setLettersNotAtLocationHelper(4, event.target.value);
   };
 
+  const handleLettersNotInWordChanged = (event: any) => {
+    console.log('new value');
+    console.log(event.target.value);
+    props.onSetLettersNotInWord(event.target.value);
+  };
+
+  
   return (
     <Box
       component="form"
@@ -171,6 +179,7 @@ const App = (props: AppProps) => {
         style={{ width: '260px' }}
         inputProps={{ maxLength: 25 }}
         variant="outlined"
+        onChange={handleLettersNotInWordChanged}
       />
       <br />
       <Button variant="contained">List words</Button>
@@ -187,6 +196,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetLetterAtLocation: cnSetLetterAtLocation,
     onSetLettersNotAtLocation: cnSetLettersNotAtLocation,
+    onSetLettersNotInWord: cnSetLettersNotInWord,
   }, dispatch);
 };
 

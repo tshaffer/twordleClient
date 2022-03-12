@@ -8,6 +8,7 @@ import { TedModelBaseAction } from './baseAction';
 // ------------------------------------
 const SET_LETTER_AT_LOCATION = 'SET_LETTER_AT_LOCATION';
 const SET_LETTERS_NOT_AT_LOCATION = 'ADD_LETTER_NOT_AT_LOCATION';
+const SET_LETTERS_NOT_IN_WORD = 'SET_LETTERS_NOT_IN_WORD';
 
 // ------------------------------------
 // Actions
@@ -31,7 +32,7 @@ export const setLetterAtLocation = (
   };
 };
 
-export interface SetLetteractersNotAtLocation {
+export interface SetLettersNotAtLocation {
   index: number;
   lettersNotAtLocation: string;
 }
@@ -49,6 +50,20 @@ export const setLettersNotAtLocation = (
   };
 };
 
+export interface SetLettersNotInWord {
+  lettersNotInWord: string,
+}
+
+export const setLettersNotInWord = (
+  lettersNotInWord: string,
+): any => {
+  return {
+    type: SET_LETTERS_NOT_IN_WORD,
+    payload: {
+      lettersNotInWord,
+    },
+  };
+};
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -56,12 +71,12 @@ export const setLettersNotAtLocation = (
 const initialState: AppState = {
   lettersAtExactLocation: ['', '', '', '', ''],
   lettersNotAtExactLocation: [],
-  lettersNotInWord: [],
+  lettersNotInWord: '',
 };
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedModelBaseAction<SetLetterAtLocation & SetLetteractersNotAtLocation>
+  action: TedModelBaseAction<SetLetterAtLocation & SetLettersNotAtLocation & SetLettersNotInWord>
 ): AppState => {
   switch (action.type) {
     case SET_LETTER_AT_LOCATION: {
@@ -73,6 +88,9 @@ export const appStateReducer = (
       const newState = cloneDeep(state);
       newState.lettersNotAtExactLocation[action.payload.index] = action.payload.lettersNotAtLocation;
       return newState;
+    }
+    case SET_LETTERS_NOT_IN_WORD: {
+      return { ...state, lettersNotInWord: action.payload.lettersNotInWord };
     }
     default:
       return state;

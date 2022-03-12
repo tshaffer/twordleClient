@@ -11,5 +11,5 @@ type StringArray = string[];
 export interface AppState {
   lettersAtExactLocation: string[],         // each item in the array represents the correct letter for that position
   lettersNotAtExactLocation: string[],      // each item in the array is a string of letters, where each letter is in the answer but not in that location
-  lettersNotInWord: string[],
+  lettersNotInWord: string,
 }
