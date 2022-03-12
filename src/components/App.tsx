@@ -7,7 +7,12 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-import { cnSetLetterAtLocation, cnSetLettersNotAtLocation, cnSetLettersNotInWord } from '../controllers';
+import {
+  cnSetLetterAtLocation,
+  cnSetLettersNotAtLocation,
+  cnSetLettersNotInWord,
+  cnListWords,
+} from '../controllers';
 
 import {
   getLettersAtExactLocation,
@@ -22,6 +27,7 @@ export interface AppProps {
   onSetLetterAtLocation: (index: number, letterAtLocation: string,) => any;
   onSetLettersNotAtLocation: (index: number, lettersNotAtLocation: string) => any;
   onSetLettersNotInWord: (lettersNotInWord: string) => any;
+  onListWords: () => any;
 }
 
 const App = (props: AppProps) => {
@@ -106,6 +112,9 @@ const App = (props: AppProps) => {
     props.onSetLettersNotInWord(event.target.value);
   };
 
+  const handleListWords = () => {
+    props.onListWords();
+  };
 
   return (
     <Box
@@ -210,7 +219,12 @@ const App = (props: AppProps) => {
         onChange={handleLettersNotInWordChanged}
       />
       <br />
-      <Button variant="contained">List words</Button>
+      <Button
+        variant="contained"
+        onClick={handleListWords}
+      >
+        List words
+      </Button>
     </Box>
   );
 };
@@ -228,6 +242,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetLetterAtLocation: cnSetLetterAtLocation,
     onSetLettersNotAtLocation: cnSetLettersNotAtLocation,
     onSetLettersNotInWord: cnSetLettersNotInWord,
+    onListWords: cnListWords,
   }, dispatch);
 };
 
