@@ -6,45 +6,45 @@ import { TedModelBaseAction } from './baseAction';
 // ------------------------------------
 // Constants
 // ------------------------------------
-const SET_CHAR_AT_LOCATION = 'SET_CHAR_AT_LOCATION';
-const SET_CHARS_NOT_AT_LOCATION = 'ADD_CHAR_NOT_AT_LOCATION';
+const SET_LETTER_AT_LOCATION = 'SET_LETTER_AT_LOCATION';
+const SET_LETTERS_NOT_AT_LOCATION = 'ADD_LETTER_NOT_AT_LOCATION';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export interface SetCharAtLocation {
+export interface SetLetterAtLocation {
   index: number;
-  charAtLocation: string;
+  letterAtLocation: string;
 }
 
-export const setCharAtLocation = (
+export const setLetterAtLocation = (
   index: number,
-  charAtLocation: string,
+  letterAtLocation: string,
 ): any => {
   return {
-    type: SET_CHAR_AT_LOCATION,
+    type: SET_LETTER_AT_LOCATION,
     payload: {
       index,
-      charAtLocation,
+      letterAtLocation,
     },
   };
 };
 
-export interface SetCharactersNotAtLocation {
+export interface SetLetteractersNotAtLocation {
   index: number;
-  charsNotAtLocation: string;
+  lettersNotAtLocation: string;
 }
 
-export const setCharsNotAtLocation = (
+export const setLettersNotAtLocation = (
   index: number,
-  charsNotAtLocation: string,
+  lettersNotAtLocation: string,
 ): any => {
   return {
-    type: SET_CHARS_NOT_AT_LOCATION,
+    type: SET_LETTERS_NOT_AT_LOCATION,
     payload: {
       index,
-      charsNotAtLocation,
+      lettersNotAtLocation,
     },
   };
 };
@@ -54,24 +54,24 @@ export const setCharsNotAtLocation = (
 // ------------------------------------
 
 const initialState: AppState = {
-  charsAtExactLocation: ['', '', '', '', ''],
-  charsNotAtExactLocation: [],
-  charsNotInWord: [],
+  lettersAtExactLocation: ['', '', '', '', ''],
+  lettersNotAtExactLocation: [],
+  lettersNotInWord: [],
 };
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedModelBaseAction<SetCharAtLocation & SetCharactersNotAtLocation>
+  action: TedModelBaseAction<SetLetterAtLocation & SetLetteractersNotAtLocation>
 ): AppState => {
   switch (action.type) {
-    case SET_CHAR_AT_LOCATION: {
+    case SET_LETTER_AT_LOCATION: {
       const newState = cloneDeep(state);
-      newState.charsAtExactLocation[action.payload.index] = action.payload.charAtLocation;
+      newState.lettersAtExactLocation[action.payload.index] = action.payload.letterAtLocation;
       return newState;
     }
-    case SET_CHARS_NOT_AT_LOCATION: {
+    case SET_LETTERS_NOT_AT_LOCATION: {
       const newState = cloneDeep(state);
-      newState.charsNotAtExactLocation[action.payload.index] = action.payload.charsNotAtLocation;
+      newState.lettersNotAtExactLocation[action.payload.index] = action.payload.lettersNotAtLocation;
       return newState;
     }
     default:
