@@ -9,7 +9,16 @@ import Button from '@mui/material/Button';
 
 import { cnSetLetterAtLocation, cnSetLettersNotAtLocation, cnSetLettersNotInWord } from '../controllers';
 
+import {
+  getLettersAtExactLocation,
+  getLettersNotAtExactLocation,
+  getLettersNotInWord,
+} from '../selectors';
+
 export interface AppProps {
+  lettersAtExactLocation: string[];
+  lettersNotAtExactLocation: string[];
+  lettersNotInWord: string;
   onSetLetterAtLocation: (index: number, letterAtLocation: string,) => any;
   onSetLettersNotAtLocation: (index: number, lettersNotAtLocation: string) => any;
   onSetLettersNotInWord: (lettersNotInWord: string) => any;
@@ -23,6 +32,14 @@ const App = (props: AppProps) => {
 
   const init = () => {
     console.log('app init invoked');
+  };
+
+  const getLetterAtExactLocation = (index: number): string => {
+    return props.lettersAtExactLocation[index];
+  };
+
+  const getLettersNotAtExactLocation = (index: number): string => {
+    return props.lettersNotAtExactLocation[index];
   };
 
   const setLetterAtLocationHelper = (index: number, value: string) => {
@@ -89,7 +106,7 @@ const App = (props: AppProps) => {
     props.onSetLettersNotInWord(event.target.value);
   };
 
-  
+
   return (
     <Box
       component="form"
@@ -105,6 +122,7 @@ const App = (props: AppProps) => {
         style={{ width: '36px' }}
         inputProps={{ maxLength: 1 }}
         variant="outlined"
+        value={getLetterAtExactLocation(0)}
         onChange={handleLetterAtIndex0Changed}
       />
       <TextField
@@ -112,6 +130,7 @@ const App = (props: AppProps) => {
         style={{ width: '36px' }}
         inputProps={{ maxLength: 1 }}
         variant="outlined"
+        value={getLetterAtExactLocation(1)}
         onChange={handleLetterAtIndex1Changed}
       />
       <TextField
@@ -119,6 +138,7 @@ const App = (props: AppProps) => {
         inputProps={{ maxLength: 1 }}
         variant="outlined"
         style={{ width: '36px' }}
+        value={getLetterAtExactLocation(2)}
         onChange={handleLetterAtIndex2Changed}
       />
       <TextField
@@ -126,6 +146,7 @@ const App = (props: AppProps) => {
         inputProps={{ maxLength: 1 }}
         style={{ width: '36px' }}
         variant="outlined"
+        value={getLetterAtExactLocation(3)}
         onChange={handleLetterAtIndex3Changed}
       />
       <TextField
@@ -133,6 +154,7 @@ const App = (props: AppProps) => {
         inputProps={{ maxLength: 1 }}
         style={{ width: '36px' }}
         variant="outlined"
+        value={getLetterAtExactLocation(4)}
         onChange={handleLetterAtIndex4Changed}
       />
       <br />
@@ -142,6 +164,7 @@ const App = (props: AppProps) => {
         style={{ width: '74px' }}
         inputProps={{ maxLength: 5 }}
         variant="outlined"
+        value={getLettersNotAtExactLocation(0)}
         onChange={handleWordNotAtIndex0Changed}
       />
       <TextField
@@ -149,6 +172,7 @@ const App = (props: AppProps) => {
         style={{ width: '74px' }}
         inputProps={{ maxLength: 5 }}
         variant="outlined"
+        value={getLettersNotAtExactLocation(1)}
         onChange={handleWordNotAtIndex1Changed}
       />
       <TextField
@@ -156,6 +180,7 @@ const App = (props: AppProps) => {
         inputProps={{ maxLength: 5 }}
         variant="outlined"
         style={{ width: '74px' }}
+        value={getLettersNotAtExactLocation(2)}
         onChange={handleWordNotAtIndex2Changed}
       />
       <TextField
@@ -163,6 +188,7 @@ const App = (props: AppProps) => {
         inputProps={{ maxLength: 5 }}
         style={{ width: '74px' }}
         variant="outlined"
+        value={getLettersNotAtExactLocation(3)}
         onChange={handleWordNotAtIndex3Changed}
       />
       <TextField
@@ -170,6 +196,7 @@ const App = (props: AppProps) => {
         inputProps={{ maxLength: 5 }}
         style={{ width: '74px' }}
         variant="outlined"
+        value={getLettersNotAtExactLocation(4)}
         onChange={handleWordNotAtIndex4Changed}
       />
       <br />
@@ -179,6 +206,7 @@ const App = (props: AppProps) => {
         style={{ width: '260px' }}
         inputProps={{ maxLength: 25 }}
         variant="outlined"
+        value={props.lettersNotInWord}
         onChange={handleLettersNotInWordChanged}
       />
       <br />
@@ -189,6 +217,9 @@ const App = (props: AppProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    lettersAtExactLocation: getLettersAtExactLocation(state),
+    lettersNotAtExactLocation: getLettersNotAtExactLocation(state),
+    lettersNotInWord: getLettersNotInWord(state),
   };
 }
 
