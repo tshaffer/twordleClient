@@ -87,11 +87,28 @@ export const cnListWords = (): any => {
       }
     }
 
+    const lettersSomewhereInWord: string[] = [];
+    lettersNotAtExactLocation.forEach((lettersNotAtThisLocation: string) => {
+      if (!isNil(lettersNotAtThisLocation)) {
+        const lettersNotAtThisLocationArray = lettersNotAtThisLocation.split('');
+        if (!isNil(lettersNotAtThisLocationArray)) {
+          lettersNotAtThisLocationArray.forEach((letterNotAtThisLocation: string) => {
+            if (lettersSomewhereInWord.indexOf(letterNotAtThisLocation)) {
+              lettersSomewhereInWord.push(letterNotAtThisLocation)
+            }
+          });
+        }
+      }
+    });
+
+    console.log('lettersSomewhereInWord');
+    console.log(lettersSomewhereInWord);
+
     const path = serverUrl + apiUrlFragment + 'getWords';
 
     const getWordsRequestBody: any = {
       candidateLettersAtLocation,
-      lettersNotAtExactLocation,
+      lettersSomewhereInWord,
     };
     return axios.post(
       path,
