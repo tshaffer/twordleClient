@@ -12,3 +12,8 @@ export const getLettersNotInWord = (state: TedState) => {
   return state.appState.lettersNotInWord;
 };
 
+export const getPossibleWords = (state: TedState): string[] => {
+  return state.appState.possibleWords;
+};
+
+

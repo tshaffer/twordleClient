@@ -9,6 +9,7 @@ import { TedModelBaseAction } from './baseAction';
 const SET_LETTER_AT_LOCATION = 'SET_LETTER_AT_LOCATION';
 const SET_LETTERS_NOT_AT_LOCATION = 'ADD_LETTER_NOT_AT_LOCATION';
 const SET_LETTERS_NOT_IN_WORD = 'SET_LETTERS_NOT_IN_WORD';
+const SET_POSSIBLE_WORDS = 'SET_POSSIBLE_WORDS';
 
 // ------------------------------------
 // Actions
@@ -64,6 +65,22 @@ export const setLettersNotInWord = (
     },
   };
 };
+
+export interface SetPossibleWords {
+  possibleWords: string[],
+}
+
+export const setPossibleWords = (
+  possibleWords: string[],
+): any => {
+  return {
+    type: SET_POSSIBLE_WORDS,
+    payload: {
+      possibleWords,
+    },
+  };
+};
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -72,11 +89,12 @@ const initialState: AppState = {
   lettersAtExactLocation: ['', '', '', '', ''],
   lettersNotAtExactLocation: [],
   lettersNotInWord: '',
+  possibleWords: [],
 };
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedModelBaseAction<SetLetterAtLocation & SetLettersNotAtLocation & SetLettersNotInWord>
+  action: TedModelBaseAction<SetLetterAtLocation & SetLettersNotAtLocation & SetLettersNotInWord & SetPossibleWords>
 ): AppState => {
   switch (action.type) {
     case SET_LETTER_AT_LOCATION: {
@@ -91,6 +109,9 @@ export const appStateReducer = (
     }
     case SET_LETTERS_NOT_IN_WORD: {
       return { ...state, lettersNotInWord: action.payload.lettersNotInWord };
+    }
+    case SET_POSSIBLE_WORDS: {
+      return { ...state, possibleWords: action.payload.possibleWords };
     }
     default:
       return state;

@@ -18,12 +18,16 @@ import {
   getLettersAtExactLocation,
   getLettersNotAtExactLocation,
   getLettersNotInWord,
+  getPossibleWords,
 } from '../selectors';
+import { List, ListItem, ListItemText, Paper } from '@mui/material';
+import _ = require('lodash');
 
 export interface AppProps {
   lettersAtExactLocation: string[];
   lettersNotAtExactLocation: string[];
   lettersNotInWord: string;
+  possibleWords: string[];
   onSetLetterAtLocation: (index: number, letterAtLocation: string,) => any;
   onSetLettersNotAtLocation: (index: number, lettersNotAtLocation: string) => any;
   onSetLettersNotInWord: (lettersNotInWord: string) => any;
@@ -115,6 +119,35 @@ const App = (props: AppProps) => {
   const handleListWords = () => {
     props.onListWords();
   };
+
+  const renderWord = (word: string) => {
+    return (
+      <ListItem>
+        <ListItemText>
+          {word}
+        </ListItemText>
+      </ListItem>
+    );
+  };
+
+  const renderWordList = () => {
+
+    if (props.possibleWords.length > 0) {
+      return props.possibleWords.map((possibleWord: string) => {
+        return renderWord(possibleWord);
+      });
+    } else {
+      return (
+        <ListItem>
+          <ListItemText>
+            None
+          </ListItemText>
+        </ListItem>
+      );
+    }
+  };
+
+  const wordList = renderWordList();
 
   return (
     <Box
@@ -225,6 +258,11 @@ const App = (props: AppProps) => {
       >
         List words
       </Button>
+      <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+        <List>
+          {wordList}
+        </List>
+      </Paper>
     </Box>
   );
 };
@@ -234,6 +272,7 @@ function mapStateToProps(state: any) {
     lettersAtExactLocation: getLettersAtExactLocation(state),
     lettersNotAtExactLocation: getLettersNotAtExactLocation(state),
     lettersNotInWord: getLettersNotInWord(state),
+    possibleWords: getPossibleWords(state),
   };
 }
 

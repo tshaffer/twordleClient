@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { TedState } from '../types';
-import { setLetterAtLocation, setLettersNotAtLocation, setLettersNotInWord } from '../models';
+import { setLetterAtLocation, setLettersNotAtLocation, setLettersNotInWord, setPossibleWords } from '../models';
 import { getLettersAtExactLocation, getLettersNotAtExactLocation, getLettersNotInWord } from '../selectors';
 
 import { apiUrlFragment, serverUrl } from '../index';
@@ -110,13 +110,10 @@ export const cnListWords = (): any => {
       getWordsRequestBody,
     ).then((response) => {
       console.log(response);
-      // dispatch(setFileUploadStatus('Upload successful'));
-      return;
+      dispatch(setPossibleWords(response.data.words));
     }).catch((error) => {
       console.log('error');
       console.log(error);
-      // dispatch(setFileUploadStatus('Upload failed: ' + error.toString()));
-      return;
     });
   };
 };
