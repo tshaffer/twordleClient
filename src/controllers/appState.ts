@@ -64,18 +64,6 @@ export const cnListWords = (): any => {
 
         let candidateLettersAtThisLocation: string[] = candidateLettersAtLocation[i];
 
-        // eliminate lettersAtExactLocation
-        for (let j = 0; j < 5; j++) {
-          if (lettersAtExactLocation[j] !== '') {
-            const letterAtExactLocation: string = lettersAtExactLocation[j];
-            candidateLettersAtThisLocation = candidateLettersAtThisLocation.filter(item => item !== letterAtExactLocation);
-            // const indexOfLetterAtExactLocation = candidateLettersAtThisLocation.indexOf(letterAtExactLocation);
-            // if (indexOfLetterAtExactLocation >= 0) {
-            // }
-          }
-        }
-        console.log(candidateLettersAtThisLocation);
-
         // eliminate lettersNotInWord
         for (let j = 0; j < arrayOfLettersNotInWord.length; j++) {
           const letterNotInWord: string = arrayOfLettersNotInWord[j];
