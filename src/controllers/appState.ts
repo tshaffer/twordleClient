@@ -91,14 +91,12 @@ export const cnListWords = (): any => {
           for (let j = 0; j < arrayOfLettersNotAtThisLocation.length; j++) {
             const letterNotAtThisLocation: string = arrayOfLettersNotAtThisLocation[j];
             candidateLettersAtThisLocation = candidateLettersAtThisLocation.filter(item => item !== letterNotAtThisLocation);
-          }  
+          }
         }
         console.log(candidateLettersAtThisLocation);
 
+        candidateLettersAtLocation[i] = candidateLettersAtThisLocation;
       }
-
-
-
     }
 
     const path = serverUrl + apiUrlFragment + 'getWords';
