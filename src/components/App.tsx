@@ -58,58 +58,8 @@ const App = (props: AppProps) => {
     props.onSetLetterAtLocation(index, value);
   };
 
-  const handleLetterAtIndex0Changed = (event: any) => {
-    setLetterAtLocationHelper(0, event.target.value);
-  };
-
-  const handleLetterAtIndex1Changed = (event: any) => {
-    setLetterAtLocationHelper(1, event.target.value);
-  };
-
-  const handleLetterAtIndex2Changed = (event: any) => {
-    setLetterAtLocationHelper(2, event.target.value);
-  };
-
-  const handleLetterAtIndex3Changed = (event: any) => {
-    setLetterAtLocationHelper(3, event.target.value);
-  };
-
-  const handleLetterAtIndex4Changed = (event: any) => {
-    setLetterAtLocationHelper(4, event.target.value);
-  };
-
   const setLettersNotAtLocationHelper = (index: number, value: string) => {
     props.onSetLettersNotAtLocation(index, value);
-  };
-
-  const handleWordNotAtIndex0Changed = (event: any) => {
-    console.log('new value');
-    console.log(event.target.value);
-    setLettersNotAtLocationHelper(0, event.target.value);
-  };
-
-  const handleWordNotAtIndex1Changed = (event: any) => {
-    console.log('new value');
-    console.log(event.target.value);
-    setLettersNotAtLocationHelper(1, event.target.value);
-  };
-
-  const handleWordNotAtIndex2Changed = (event: any) => {
-    console.log('new value');
-    console.log(event.target.value);
-    setLettersNotAtLocationHelper(2, event.target.value);
-  };
-
-  const handleWordNotAtIndex3Changed = (event: any) => {
-    console.log('new value');
-    console.log(event.target.value);
-    setLettersNotAtLocationHelper(3, event.target.value);
-  };
-
-  const handleWordNotAtIndex4Changed = (event: any) => {
-    console.log('new value');
-    console.log(event.target.value);
-    setLettersNotAtLocationHelper(4, event.target.value);
   };
 
   const handleLettersNotInWordChanged = (event: any) => {
@@ -123,10 +73,55 @@ const App = (props: AppProps) => {
     props.onListWords();
   };
 
+  const renderLetterInWordAtExactLocation = (index: number) => {
+    return (
+      <TextField
+        id={'letterInWordAtExactLocation' + index.toString()}
+        key={'letterInWordAtExactLocation' + index.toString()}
+        style={{ width: '36px' }}
+        inputProps={{ maxLength: 1 }}
+        variant="outlined"
+        value={getLetterAtExactLocation(index)}
+        onChange={() => setLetterAtLocationHelper(index, (event.target as any).value)}
+      />
+
+    );
+  };
+
+  const renderLettersInWordAtExactLocation = () => {
+    const lettersInWordAtExactLocation = [];
+    for (let i = 0; i < 5; i++) {
+      lettersInWordAtExactLocation.push(renderLetterInWordAtExactLocation(i));
+    }
+    return lettersInWordAtExactLocation;
+  };
+
+  const renderLetterInWordKnownNonLocation = (index: number) => {
+    return (
+      <TextField
+        id={'letterInWordAtKnownNonLocation' + index.toString()}
+        key={'letterInWordAtKnownNonLocation' + index.toString()}
+        style={{ width: '74px' }}
+        inputProps={{ maxLength: 5 }}
+        variant="outlined"
+        value={getLettersNotAtExactLocation(index)}
+        onChange={() => setLettersNotAtLocationHelper(index, (event.target as any).value)}
+      />
+    );
+  };
+
+  const renderLettersInWordKnownNonLocation = () => {
+    const lettersInWordKnownNonLocation = [];
+    for (let i = 0; i < 5; i++) {
+      lettersInWordKnownNonLocation.push(renderLetterInWordKnownNonLocation(i));
+    }
+    return lettersInWordKnownNonLocation;
+  };
+
   const renderWord = (word: string) => {
     return (
-      <ListItem>
-        <ListItemText>
+      <ListItem key={word}>
+        <ListItemText key={word}>
           {word}
         </ListItemText>
       </ListItem>
@@ -156,7 +151,7 @@ const App = (props: AppProps) => {
     }
     const wordList = renderWordList();
     return (
-      <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+      <Paper style={{ maxHeight: '100%', overflow: 'auto' }}>
         <List
           subheader={<ListSubheader>Possible words</ListSubheader>}
         >
@@ -167,6 +162,8 @@ const App = (props: AppProps) => {
 
   };
 
+  const lettersInWordAtExactLocation = renderLettersInWordAtExactLocation();
+  const lettersInWordKnownNonLocation = renderLettersInWordKnownNonLocation();
   const wordListElement = renderWordListElement();
 
   return (
@@ -179,88 +176,10 @@ const App = (props: AppProps) => {
       autoComplete="off"
     >
       Letters in the word at their exact location:
-      <TextField
-        id="inWordIndex0"
-        style={{ width: '36px' }}
-        inputProps={{ maxLength: 1 }}
-        variant="outlined"
-        value={getLetterAtExactLocation(0)}
-        onChange={handleLetterAtIndex0Changed}
-      />
-      <TextField
-        id="inWordIndex1"
-        style={{ width: '36px' }}
-        inputProps={{ maxLength: 1 }}
-        variant="outlined"
-        value={getLetterAtExactLocation(1)}
-        onChange={handleLetterAtIndex1Changed}
-      />
-      <TextField
-        id="inWordIndex2"
-        inputProps={{ maxLength: 1 }}
-        variant="outlined"
-        style={{ width: '36px' }}
-        value={getLetterAtExactLocation(2)}
-        onChange={handleLetterAtIndex2Changed}
-      />
-      <TextField
-        id="inWordIndex3"
-        inputProps={{ maxLength: 1 }}
-        style={{ width: '36px' }}
-        variant="outlined"
-        value={getLetterAtExactLocation(3)}
-        onChange={handleLetterAtIndex3Changed}
-      />
-      <TextField
-        id="inWordIndex4"
-        inputProps={{ maxLength: 1 }}
-        style={{ width: '36px' }}
-        variant="outlined"
-        value={getLetterAtExactLocation(4)}
-        onChange={handleLetterAtIndex4Changed}
-      />
+      {lettersInWordAtExactLocation}
       <br />
       Letters in the word at known non-location:
-      <TextField
-        id="inWordNotAtIndex0"
-        style={{ width: '74px' }}
-        inputProps={{ maxLength: 5 }}
-        variant="outlined"
-        value={getLettersNotAtExactLocation(0)}
-        onChange={handleWordNotAtIndex0Changed}
-      />
-      <TextField
-        id="inWordNotAtIndex1"
-        style={{ width: '74px' }}
-        inputProps={{ maxLength: 5 }}
-        variant="outlined"
-        value={getLettersNotAtExactLocation(1)}
-        onChange={handleWordNotAtIndex1Changed}
-      />
-      <TextField
-        id="inWordNotAtIndex2"
-        inputProps={{ maxLength: 5 }}
-        variant="outlined"
-        style={{ width: '74px' }}
-        value={getLettersNotAtExactLocation(2)}
-        onChange={handleWordNotAtIndex2Changed}
-      />
-      <TextField
-        id="inWordNotAtIndex3"
-        inputProps={{ maxLength: 5 }}
-        style={{ width: '74px' }}
-        variant="outlined"
-        value={getLettersNotAtExactLocation(3)}
-        onChange={handleWordNotAtIndex3Changed}
-      />
-      <TextField
-        id="inWordNotAtIndex4"
-        inputProps={{ maxLength: 5 }}
-        style={{ width: '74px' }}
-        variant="outlined"
-        value={getLettersNotAtExactLocation(4)}
-        onChange={handleWordNotAtIndex4Changed}
-      />
+      {lettersInWordKnownNonLocation}
       <br />
       Letters not in the word:
       <TextField
