@@ -87,7 +87,7 @@ export const setPossibleWords = (
 
 const initialState: AppState = {
   lettersAtExactLocation: ['', '', '', '', ''],
-  lettersNotAtExactLocation: [],
+  lettersNotAtExactLocation: ['', '', '', '', ''],
   lettersNotInWord: '',
   possibleWords: [],
 };
