@@ -20,7 +20,7 @@ import {
   getLettersNotInWord,
   getPossibleWords,
 } from '../selectors';
-import { List, ListItem, ListItemText, Paper } from '@mui/material';
+import { List, ListItem, ListItemText, ListSubheader, Paper } from '@mui/material';
 import _ = require('lodash');
 
 export interface AppProps {
@@ -35,6 +35,8 @@ export interface AppProps {
 }
 
 const App = (props: AppProps) => {
+
+  const [listWordsInvoked, setListWordsInvoked] = React.useState(false);
 
   React.useEffect(() => {
     init();
@@ -117,6 +119,7 @@ const App = (props: AppProps) => {
   };
 
   const handleListWords = () => {
+    setListWordsInvoked(true);
     props.onListWords();
   };
 
@@ -147,7 +150,24 @@ const App = (props: AppProps) => {
     }
   };
 
-  const wordList = renderWordList();
+  const renderWordListElement = () => {
+    if (!listWordsInvoked) {
+      return null;
+    }
+    const wordList = renderWordList();
+    return (
+      <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+        <List
+          subheader={<ListSubheader>Possible words</ListSubheader>}
+        >
+          {wordList}
+        </List>
+      </Paper>
+    );
+
+  };
+
+  const wordListElement = renderWordListElement();
 
   return (
     <Box
@@ -258,11 +278,7 @@ const App = (props: AppProps) => {
       >
         List words
       </Button>
-      <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-        <List>
-          {wordList}
-        </List>
-      </Paper>
+      {wordListElement}
     </Box>
   );
 };
