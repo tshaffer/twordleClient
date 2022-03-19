@@ -6,6 +6,11 @@ import { connect } from 'react-redux';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import {
   cnSetLetterAtLocation,
@@ -19,15 +24,17 @@ import {
   getLettersNotAtExactLocation,
   getLettersNotInWord,
   getPossibleWords,
+  getInputError,
 } from '../selectors';
 import { List, ListItem, ListItemText, ListSubheader, Paper } from '@mui/material';
-import _ = require('lodash');
+import { isNil, isString } from 'lodash';
 
 export interface AppProps {
   lettersAtExactLocation: string[];
   lettersNotAtExactLocation: string[];
   lettersNotInWord: string;
   possibleWords: string[];
+  inputError: string | null;
   onSetLetterAtLocation: (index: number, letterAtLocation: string,) => any;
   onSetLettersNotAtLocation: (index: number, lettersNotAtLocation: string) => any;
   onSetLettersNotInWord: (lettersNotInWord: string) => any;
@@ -37,6 +44,7 @@ export interface AppProps {
 const App = (props: AppProps) => {
 
   const [listWordsInvoked, setListWordsInvoked] = React.useState(false);
+  const [errorDialogOpen, setErrorDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
     init();
@@ -69,8 +77,17 @@ const App = (props: AppProps) => {
   };
 
   const handleListWords = () => {
-    setListWordsInvoked(true);
-    props.onListWords();
+    if (isNil(props.inputError)) {
+      setListWordsInvoked(true);
+      props.onListWords();
+    } else {
+      console.log('Error: ' + props.inputError);
+      setErrorDialogOpen(true);
+    }
+  };
+
+  const handleCloseErrorDialog = () => {
+    setErrorDialogOpen(false);
   };
 
   const renderLetterInWordAtExactLocation = (index: number) => {
@@ -167,38 +184,61 @@ const App = (props: AppProps) => {
   const wordListElement = renderWordListElement();
 
   return (
-    <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      Letters in the word at their exact location:
-      {lettersInWordAtExactLocation}
-      <br />
-      Letters in the word at known non-location:
-      {lettersInWordKnownNonLocation}
-      <br />
-      Letters not in the word:
-      <TextField
-        id="notInWord"
-        style={{ width: '260px' }}
-        inputProps={{ maxLength: 25 }}
-        variant="outlined"
-        value={props.lettersNotInWord}
-        onChange={handleLettersNotInWordChanged}
-      />
-      <br />
-      <Button
-        variant="contained"
-        onClick={handleListWords}
+    <div>
+      <Dialog
+        open={errorDialogOpen}
+        onClose={handleCloseErrorDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        List words
-      </Button>
-      {wordListElement}
-    </Box>
+        <DialogTitle id="alert-dialog-title">
+          {'Input Error'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {props.inputError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseErrorDialog}>Close</Button>
+          <Button onClick={handleCloseErrorDialog} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        Letters in the word at their exact location:
+        {lettersInWordAtExactLocation}
+        <br />
+        Letters in the word at known non-location:
+        {lettersInWordKnownNonLocation}
+        <br />
+        Letters not in the word:
+        <TextField
+          id="notInWord"
+          style={{ width: '260px' }}
+          inputProps={{ maxLength: 25 }}
+          variant="outlined"
+          value={props.lettersNotInWord}
+          onChange={handleLettersNotInWordChanged}
+        />
+        <br />
+        <Button
+          variant="contained"
+          onClick={handleListWords}
+        >
+          List words
+        </Button>
+        {wordListElement}
+      </Box>
+    </div>
   );
 };
 
@@ -208,6 +248,7 @@ function mapStateToProps(state: any) {
     lettersNotAtExactLocation: getLettersNotAtExactLocation(state),
     lettersNotInWord: getLettersNotInWord(state),
     possibleWords: getPossibleWords(state),
+    inputError: getInputError(state),
   };
 }
 
