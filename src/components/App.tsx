@@ -78,7 +78,7 @@ const App = (props: AppProps) => {
       <TextField
         id={'letterInWordAtExactLocation' + index.toString()}
         key={'letterInWordAtExactLocation' + index.toString()}
-        style={{ width: '36px' }}
+        style={{ width: '42px' }}
         inputProps={{ maxLength: 1 }}
         variant="outlined"
         value={getLetterAtExactLocation(index)}
