@@ -17,6 +17,8 @@ import {
   cnSetLettersNotAtLocation,
   cnSetLettersNotInWord,
   cnListWords,
+  cnSetLettersInWordAtAnyLocation,
+  cnListOtherWords,
 } from '../controllers';
 
 import {
@@ -25,25 +27,31 @@ import {
   getLettersNotInWord,
   getPossibleWords,
   getInputError,
+  getLettersInWordAnyLocation,
+  getOtherWords,
 } from '../selectors';
 import { List, ListItem, ListItemText, ListSubheader, Paper } from '@mui/material';
-import { isNil, isString } from 'lodash';
+import { isNil } from 'lodash';
 
 export interface AppProps {
   lettersAtExactLocation: string[];
   lettersNotAtExactLocation: string[];
   lettersNotInWord: string;
   possibleWords: string[];
+  lettersInWordAtAnyLocation: string;
   inputError: string | null;
   onSetLetterAtLocation: (index: number, letterAtLocation: string,) => any;
   onSetLettersNotAtLocation: (index: number, lettersNotAtLocation: string) => any;
   onSetLettersNotInWord: (lettersNotInWord: string) => any;
   onListWords: () => any;
+  onSetLettersInWordAtAnyLocation: (lettersInWordAtAnyLocation: string) => any;
+  onListOtherWords: () => any;
 }
 
 const App = (props: AppProps) => {
 
   const [listWordsInvoked, setListWordsInvoked] = React.useState(false);
+  const [listOtherWordInvoked, setListOtherWordsInvoked] = React.useState(false);
   const [errorDialogOpen, setErrorDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -85,6 +93,18 @@ const App = (props: AppProps) => {
       setErrorDialogOpen(true);
     }
   };
+
+  const handleLettersInWordAtAnyLocationChanged = (event: any) => {
+    console.log('new value');
+    console.log(event.target.value);
+    props.onSetLettersInWordAtAnyLocation(event.target.value);
+  };
+
+  const handleListOtherWords = () => {
+    setListOtherWordsInvoked(true);
+    props.onListOtherWords();
+  };
+
 
   const handleCloseErrorDialog = () => {
     setErrorDialogOpen(false);
@@ -236,7 +256,24 @@ const App = (props: AppProps) => {
         >
           List words
         </Button>
+        <br />
         {wordListElement}
+        Letters in the word at any location:
+        <TextField
+          id="inWordAnywhere"
+          style={{ width: '260px' }}
+          inputProps={{ maxLength: 25 }}
+          variant="outlined"
+          value={props.lettersInWordAtAnyLocation}
+          onChange={handleLettersInWordAtAnyLocationChanged}
+        />
+        <br />
+        <Button
+          variant="contained"
+          onClick={handleListOtherWords}
+        >
+          List words
+        </Button>
       </Box>
     </div>
   );
@@ -248,6 +285,8 @@ function mapStateToProps(state: any) {
     lettersNotAtExactLocation: getLettersNotAtExactLocation(state),
     lettersNotInWord: getLettersNotInWord(state),
     possibleWords: getPossibleWords(state),
+    lettersInWordAtAnyLocation: getLettersInWordAnyLocation(state),
+    otherWords: getOtherWords(state),
     inputError: getInputError(state),
   };
 }
@@ -258,6 +297,9 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetLettersNotAtLocation: cnSetLettersNotAtLocation,
     onSetLettersNotInWord: cnSetLettersNotInWord,
     onListWords: cnListWords,
+    onSetLettersInWordAtAnyLocation: cnSetLettersInWordAtAnyLocation,
+    onListOtherWords: cnListOtherWords,
+
   }, dispatch);
 };
 

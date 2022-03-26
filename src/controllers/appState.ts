@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { TedState } from '../types';
-import { setLetterAtLocation, setLettersNotAtLocation, setLettersNotInWord, setPossibleWords } from '../models';
+import { setLetterAtLocation, setLettersInWordAtAnyLocation, setLettersNotAtLocation, setLettersNotInWord, setPossibleWords } from '../models';
 import { getLettersAtExactLocation, getLettersNotAtExactLocation, getLettersNotInWord } from '../selectors';
 
 import { apiUrlFragment, serverUrl } from '../index';
@@ -122,3 +122,18 @@ export const cnListWords = (): any => {
     });
   };
 };
+
+export const cnSetLettersInWordAtAnyLocation = (
+  lettersInWordAtAnyLocation: string,
+): any => {
+  return (dispatch: any) => {
+    dispatch(setLettersInWordAtAnyLocation(lettersInWordAtAnyLocation));
+  };
+};
+
+export const cnListOtherWords = (): any => {
+  return (dispatch: any, getState: any) => {
+    console.log('cnListOtherWords');
+  };
+};
+

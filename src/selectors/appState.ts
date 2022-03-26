@@ -17,6 +17,15 @@ export const getPossibleWords = (state: TedState): string[] => {
   return state.appState.possibleWords;
 };
 
+export const getLettersInWordAnyLocation = (state: TedState): string => {
+  return state.appState.lettersInWordAtAnyLocation;
+};
+
+export const getOtherWords = (state: TedState): string[] => {
+  return state.appState.otherWords;
+};
+
+
 export const getInputError = (state: TedState): string | null => {
 
   const lettersAtExactLocation: string[] = getLettersAtExactLocation(state);
