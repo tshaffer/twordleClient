@@ -71,17 +71,17 @@ const App = (props: AppProps) => {
   };
 
   const setLetterAtLocationHelper = (index: number, value: string) => {
-    props.onSetLetterAtLocation(index, value);
+    props.onSetLetterAtLocation(index, value.toLowerCase());
   };
 
   const setLettersNotAtLocationHelper = (index: number, value: string) => {
-    props.onSetLettersNotAtLocation(index, value);
+    props.onSetLettersNotAtLocation(index, value.toLowerCase());
   };
 
   const handleLettersNotInWordChanged = (event: any) => {
     console.log('new value');
     console.log(event.target.value);
-    props.onSetLettersNotInWord(event.target.value);
+    props.onSetLettersNotInWord(event.target.value.toLowerCase());
   };
 
   const handleListWords = () => {
@@ -97,7 +97,7 @@ const App = (props: AppProps) => {
   const handleLettersInWordAtAnyLocationChanged = (event: any) => {
     console.log('new value');
     console.log(event.target.value);
-    props.onSetLettersInWordAtAnyLocation(event.target.value);
+    props.onSetLettersInWordAtAnyLocation(event.target.value.toLowerCase());
   };
 
   const handleListOtherWords = () => {
