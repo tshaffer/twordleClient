@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { TedState } from '../types';
 import { setLetterAtLocation, setLettersInWordAtAnyLocation, setLettersNotAtLocation, setLettersNotInWord, setPossibleWords } from '../models';
-import { getLettersAtExactLocation, getLettersNotAtExactLocation, getLettersNotInWord } from '../selectors';
+import { getLettersAtExactLocation, getLettersInWordAnyLocation, getLettersNotAtExactLocation, getLettersNotInWord } from '../selectors';
 
 import { apiUrlFragment, serverUrl } from '../index';
 import { isNil } from 'lodash';
@@ -131,9 +131,67 @@ export const cnSetLettersInWordAtAnyLocation = (
   };
 };
 
+export const candidateWordIncludesLetterInWordAtAnyLocation = (lettersInWordAtAnyLocationAsArray: string[], candidateWord: string): boolean => {
+  for (const letterInWordAtAnyLocation of lettersInWordAtAnyLocationAsArray) {
+    if (candidateWord.includes(letterInWordAtAnyLocation)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const candidateWordIncludesDuplicateLetterInWordAtAnyLocation = (lettersInWordAtAnyLocationAsArray: string[], candidateWord: string): boolean => {
+  for (const letterInWordAtAnyLocation of lettersInWordAtAnyLocationAsArray) {
+    const firstIndex = candidateWord.indexOf(letterInWordAtAnyLocation);
+    const lastIndex = candidateWord.lastIndexOf(letterInWordAtAnyLocation);
+    const result = firstIndex !== lastIndex && firstIndex !== -1;
+    if (result) {
+      return true;
+    }
+  }
+  return false;
+};
+
+
 export const cnListOtherWords = (): any => {
   return (dispatch: any, getState: any) => {
     console.log('cnListOtherWords');
+
+    const candidateWords: string[] = [];
+
+    const commonLetters: string[] = ['e', 't', 'a', 'i', 'o', 'n', 's', 'h', 'r'];
+
+    const lettersInWordAtAnyLocation = getLettersInWordAnyLocation(getState());
+    const lettersInWordAtAnyLocationAsArray: string[] = lettersInWordAtAnyLocation.split('');
+
+    const candidateLetters: string[] = lettersInWordAtAnyLocationAsArray.concat(commonLetters);
+
+    for (let clalIndex0 = 0; clalIndex0 < candidateLetters.length; clalIndex0++) {
+      const clal0 = candidateLetters[clalIndex0];
+      for (let clalIndex1 = 0; clalIndex1 < candidateLetters.length; clalIndex1++) {
+        const clal1 = candidateLetters[clalIndex1];
+        for (let clalIndex2 = 0; clalIndex2 < candidateLetters.length; clalIndex2++) {
+          const clal2 = candidateLetters[clalIndex2];
+          for (let clalIndex3 = 0; clalIndex3 < candidateLetters.length; clalIndex3++) {
+            const clal3 = candidateLetters[clalIndex3];
+            for (let clalIndex4 = 0; clalIndex4 < candidateLetters.length; clalIndex4++) {
+              const clal4 = candidateLetters[clalIndex4];
+
+              const candidateWord: string = clal0 + clal1 + clal2 + clal3 + clal4;
+
+              if (candidateWordIncludesLetterInWordAtAnyLocation(lettersInWordAtAnyLocationAsArray, candidateWord)) {
+                if (!candidateWordIncludesDuplicateLetterInWordAtAnyLocation(lettersInWordAtAnyLocationAsArray, candidateWord)) {
+                  candidateWords.push(candidateWord);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    console.log(candidateWords);
+    console.log(candidateWords.length);
   };
 };
 
