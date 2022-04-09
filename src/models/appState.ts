@@ -148,7 +148,7 @@ export const appStateReducer = (
       return { ...state, possibleWords: action.payload.possibleWords };
     }
     case SET_LETTERS_IN_WORD_AT_ANY_LOCATION: {
-      return { ...state, lettersNotInWord: action.payload.lettersInWordAtAnyLocation };
+      return { ...state, lettersInWordAtAnyLocation: action.payload.lettersInWordAtAnyLocation };
     }
     case SET_OTHER_WORDS: {
       return { ...state, otherWords: action.payload.otherWords };
