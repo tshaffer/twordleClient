@@ -12,6 +12,6 @@ export interface AppState {
   lettersNotAtExactLocation: string[],      // each item in the array is a string of letters, where each letter is in the answer but not in that location
   lettersNotInWord: string,                 // each letter in the string represents a letter that is not in the word
   possibleWords: string[],                  // words returned by the server that fit the criteria above
-  lettersInWordAtAnyLocation: string,
-  otherWords: string[],
+  helperLetters: string,
+  helperWord: string,
 }

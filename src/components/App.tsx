@@ -17,8 +17,8 @@ import {
   cnSetLettersNotAtLocation,
   cnSetLettersNotInWord,
   cnListWords,
-  cnSetLettersInWordAtAnyLocation,
-  cnListOtherWords,
+  cnSetHelperLetters,
+  cnGetHelperWord,
 } from '../controllers';
 
 import {
@@ -28,7 +28,7 @@ import {
   getPossibleWords,
   getInputError,
   getLettersInWordAnyLocation,
-  getOtherWords,
+  getHelperWord,
 } from '../selectors';
 import { List, ListItem, ListItemText, ListSubheader, Paper } from '@mui/material';
 import { isNil } from 'lodash';
@@ -38,20 +38,21 @@ export interface AppProps {
   lettersNotAtExactLocation: string[];
   lettersNotInWord: string;
   possibleWords: string[];
-  lettersInWordAtAnyLocation: string;
+  helperLetters: string;
+  helperWord: string;
   inputError: string | null;
   onSetLetterAtLocation: (index: number, letterAtLocation: string,) => any;
   onSetLettersNotAtLocation: (index: number, lettersNotAtLocation: string) => any;
   onSetLettersNotInWord: (lettersNotInWord: string) => any;
   onListWords: () => any;
-  onSetLettersInWordAtAnyLocation: (lettersInWordAtAnyLocation: string) => any;
-  onListOtherWords: () => any;
+  onSetHelperLetters: (helperLetters: string) => any;
+  onGetHelperWord: () => any;
 }
 
 const App = (props: AppProps) => {
 
   const [listWordsInvoked, setListWordsInvoked] = React.useState(false);
-  const [listOtherWordInvoked, setListOtherWordsInvoked] = React.useState(false);
+  const [getHelperWordInvoked, setGetHelperWordInvoked] = React.useState(false);
   const [errorDialogOpen, setErrorDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -94,15 +95,15 @@ const App = (props: AppProps) => {
     }
   };
 
-  const handleLettersInWordAtAnyLocationChanged = (event: any) => {
+  const handleSetHelperLetters = (event: any) => {
     console.log('new value');
     console.log(event.target.value);
-    props.onSetLettersInWordAtAnyLocation(event.target.value.toLowerCase());
+    props.onSetHelperLetters(event.target.value.toLowerCase());
   };
 
-  const handleListOtherWords = () => {
-    setListOtherWordsInvoked(true);
-    props.onListOtherWords();
+  const handleGetHelperWord = () => {
+    setGetHelperWordInvoked(true);
+    props.onGetHelperWord();
   };
 
 
@@ -199,9 +200,18 @@ const App = (props: AppProps) => {
 
   };
 
+  const renderHelperWord = () => {
+    return (
+      <p>
+        {props.helperWord}
+      </p>
+    );
+  }
+
   const lettersInWordAtExactLocation = renderLettersInWordAtExactLocation();
   const lettersInWordKnownNonLocation = renderLettersInWordKnownNonLocation();
   const wordListElement = renderWordListElement();
+  const helperWord = renderHelperWord();
 
   return (
     <div>
@@ -258,22 +268,24 @@ const App = (props: AppProps) => {
         </Button>
         <br />
         {wordListElement}
-        Letters in the word at any location:
+        Specify the desired letters in the helper word:
         <TextField
-          id="inWordAnywhere"
+          id="isDesiredLetters"
           style={{ width: '260px' }}
           inputProps={{ maxLength: 25 }}
           variant="outlined"
-          value={props.lettersInWordAtAnyLocation}
-          onChange={handleLettersInWordAtAnyLocationChanged}
+          value={props.helperLetters}
+          onChange={handleSetHelperLetters}
         />
         <br />
         <Button
           variant="contained"
-          onClick={handleListOtherWords}
+          onClick={handleGetHelperWord}
         >
-          List words
+          Get Helper Word
         </Button>
+        <br />
+        {helperWord}
       </Box>
     </div>
   );
@@ -285,8 +297,8 @@ function mapStateToProps(state: any) {
     lettersNotAtExactLocation: getLettersNotAtExactLocation(state),
     lettersNotInWord: getLettersNotInWord(state),
     possibleWords: getPossibleWords(state),
-    lettersInWordAtAnyLocation: getLettersInWordAnyLocation(state),
-    otherWords: getOtherWords(state),
+    helperLetters: getLettersInWordAnyLocation(state),
+    helperWord: getHelperWord(state),
     inputError: getInputError(state),
   };
 }
@@ -297,8 +309,8 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetLettersNotAtLocation: cnSetLettersNotAtLocation,
     onSetLettersNotInWord: cnSetLettersNotInWord,
     onListWords: cnListWords,
-    onSetLettersInWordAtAnyLocation: cnSetLettersInWordAtAnyLocation,
-    onListOtherWords: cnListOtherWords,
+    onSetHelperLetters: cnSetHelperLetters,
+    onGetHelperWord: cnGetHelperWord,
 
   }, dispatch);
 };

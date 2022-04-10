@@ -18,11 +18,11 @@ export const getPossibleWords = (state: TedState): string[] => {
 };
 
 export const getLettersInWordAnyLocation = (state: TedState): string => {
-  return state.appState.lettersInWordAtAnyLocation;
+  return state.appState.helperLetters;
 };
 
-export const getOtherWords = (state: TedState): string[] => {
-  return state.appState.otherWords;
+export const getHelperWord = (state: TedState): string => {
+  return state.appState.helperWord;
 };
 
 

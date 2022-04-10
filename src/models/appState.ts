@@ -10,8 +10,8 @@ const SET_LETTER_AT_LOCATION = 'SET_LETTER_AT_LOCATION';
 const SET_LETTERS_NOT_AT_LOCATION = 'ADD_LETTER_NOT_AT_LOCATION';
 const SET_LETTERS_NOT_IN_WORD = 'SET_LETTERS_NOT_IN_WORD';
 const SET_POSSIBLE_WORDS = 'SET_POSSIBLE_WORDS';
-const SET_LETTERS_IN_WORD_AT_ANY_LOCATION = 'SET_LETTERS_IN_WORD_AT_ANY_LOCATION';
-const SET_OTHER_WORDS = 'SET_OTHER_WORDS';
+const SET_HELPER_LETTERS = 'SET_HELPER_LETTERS';
+const SET_HELPER_WORD = 'SET_HELPER_WORD';
 
 // ------------------------------------
 // Actions
@@ -83,32 +83,32 @@ export const setPossibleWords = (
   };
 };
 
-export interface SetLettersInWordAtAnyLocation {
-  lettersInWordAtAnyLocation: string,
+export interface SetHelperLetters {
+  helperLetters: string,
 }
 
-export const setLettersInWordAtAnyLocation = (
-  lettersInWordAtAnyLocation: string,
+export const setHelperLetters = (
+  helperLetters: string,
 ): any => {
   return {
-    type: SET_LETTERS_IN_WORD_AT_ANY_LOCATION,
+    type: SET_HELPER_LETTERS,
     payload: {
-      lettersInWordAtAnyLocation,
+      helperLetters,
     },
   };
 };
 
-export interface SetOtherWords {
-  otherWords: string[],
+export interface SetHelperWord {
+  helperWord: string,
 }
 
-export const setOtherWords = (
-  otherWords: string[],
+export const setHelperWord = (
+  helperWord: string,
 ): any => {
   return {
-    type: SET_POSSIBLE_WORDS,
+    type: SET_HELPER_WORD,
     payload: {
-      otherWords,
+      helperWord,
     },
   };
 };
@@ -122,13 +122,13 @@ const initialState: AppState = {
   lettersNotAtExactLocation: ['', '', '', '', ''],
   lettersNotInWord: '',
   possibleWords: [],
-  lettersInWordAtAnyLocation: '',
-  otherWords: [],
+  helperLetters: '',
+  helperWord: '',
 };
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedModelBaseAction<SetLetterAtLocation & SetLettersNotAtLocation & SetLettersNotInWord & SetPossibleWords & SetLettersInWordAtAnyLocation & SetOtherWords>
+  action: TedModelBaseAction<SetLetterAtLocation & SetLettersNotAtLocation & SetLettersNotInWord & SetPossibleWords & SetHelperLetters & SetHelperWord>
 ): AppState => {
   switch (action.type) {
     case SET_LETTER_AT_LOCATION: {
@@ -147,11 +147,11 @@ export const appStateReducer = (
     case SET_POSSIBLE_WORDS: {
       return { ...state, possibleWords: action.payload.possibleWords };
     }
-    case SET_LETTERS_IN_WORD_AT_ANY_LOCATION: {
-      return { ...state, lettersInWordAtAnyLocation: action.payload.lettersInWordAtAnyLocation };
+    case SET_HELPER_LETTERS: {
+      return { ...state, helperLetters: action.payload.helperLetters };
     }
-    case SET_OTHER_WORDS: {
-      return { ...state, otherWords: action.payload.otherWords };
+    case SET_HELPER_WORD: {
+      return { ...state, helperWord: action.payload.helperWord };
     }
     default:
       return state;
