@@ -30,7 +30,7 @@ import {
   getLettersInWordAnyLocation,
   getHelperWord,
 } from '../selectors';
-import { List, ListItem, ListItemText, ListSubheader, Paper } from '@mui/material';
+import { Container, List, ListItem, ListItemText, ListSubheader, Paper, Typography } from '@mui/material';
 import { isNil } from 'lodash';
 
 export interface AppProps {
@@ -268,7 +268,13 @@ const App = (props: AppProps) => {
         </Button>
         <br />
         {wordListElement}
-        Specify the desired letters in the helper word:
+        {/* <Container> */}
+        <Typography variant="body1" fontWeight={'bold'}>
+          Helper Word
+        </Typography>
+        <Typography variant="body2" minWidth={'300px'} >
+          Specify the desired letters in the helper word:
+        </Typography>
         <TextField
           id="isDesiredLetters"
           style={{ width: '260px' }}
@@ -280,12 +286,18 @@ const App = (props: AppProps) => {
         <br />
         <Button
           variant="contained"
+          style={{
+            width: '260px',
+            marginTop: '8px',
+          }}
           onClick={handleGetHelperWord}
         >
           Get Helper Word
         </Button>
         <br />
         {helperWord}
+        {/* </Container> */}
+
       </Box>
     </div>
   );
